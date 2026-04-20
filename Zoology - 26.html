@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#1e3a8a">
+  <title>DR SAHITHA IAS ACADEMY - UG-TRB Zoology Test-26</title>
+  <style>
+    :root {
+      --bg: linear-gradient(135deg, #f0f4f8, #d9e4f0);
+      --card: #fff;
+      --text: #333;
+      --border: #ddd;
+      --palette-text: #1e3a8a;
+    }
+    [data-theme="dark"] {
+      --bg: linear-gradient(135deg, #1a2338, #0f172a);
+      --card: #1e2937;
+      --text: #e2e8f0;
+      --border: #475569;
+      --palette-text: #60a5fa;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      margin: 0;
+      padding: 20px;
+      color: var(--text);
+    }
+    .container {
+      max-width: 950px;
+      margin: 0 auto;
+      background: var(--card);
+      border-radius: 20px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.18);
+      overflow: hidden;
+    }
+
+    /* Colorful Dashboard */
+    .dashboard {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 40px 30px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .dashboard::before {
+      content: '';
+      position: absolute;
+      top: -80px;
+      right: -80px;
+      width: 300px;
+      height: 300px;
+      background: rgba(255,255,255,0.12);
+      border-radius: 50%;
+    }
+
+    .score-circle {
+      width: 170px;
+      height: 170px;
+      border-radius: 50%;
+      background: conic-gradient(#22c55e 0% var(--progress), #e2e8f0 var(--progress) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 20px auto;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    .score-inner {
+      width: 130px;
+      height: 130px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #1e3a8a;
+    }
+    .score-value { font-size: 48px; font-weight: bold; line-height: 1; }
+    .score-label { font-size: 14px; opacity: 0.8; margin-top: 4px; }
+
+    .performance-badge {
+      padding: 12px 30px;
+      border-radius: 50px;
+      font-weight: bold;
+      font-size: 18px;
+      display: inline-block;
+      margin: 15px 0;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    }
+    .badge-excellent { background: #22c55e; color: white; }
+    .badge-good { background: #eab308; color: #1e3a8a; }
+    .badge-improve { background: #ef4444; color: white; }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 15px;
+      margin-top: 30px;
+    }
+    .stat-card {
+      background: rgba(255,255,255,0.18);
+      padding: 20px 15px;
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+    }
+    .stat-number {
+      font-size: 32px;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    .lang-toggle, .theme-toggle {
+      position: absolute; top: 25px; padding: 10px 20px; border-radius: 25px;
+      cursor: pointer; font-weight: bold; z-index: 100;
+    }
+    .lang-toggle { right: 140px; background: white; color: #1e3a8a; border: 2px solid #1e3a8a; }
+    .theme-toggle { right: 25px; background: #1e3a8a; color: white; border: none; }
+
+    .candidate-name {
+      position: absolute; top: 25px; left: 25px; font-weight: bold;
+      color: #1e3a8a; background: rgba(255,255,255,0.9); padding: 8px 16px;
+      border-radius: 25px; border: 2px solid #1e3a8a; z-index: 10;
+    }
+    [data-theme="dark"] .candidate-name {
+      background: rgba(30, 58, 138, 0.9); color: white; border-color: #60a5fa;
+    }
+
+    .timer { 
+      font-size: 24px; 
+      font-weight: bold; 
+      color: #ff4444; 
+      background: rgba(255,255,255,0.2); 
+      padding: 12px 30px; 
+      border-radius: 50px; 
+      display: inline-block; 
+      margin: 15px 0; 
+    }
+
+    .start-screen, .quiz-container, .result { padding: 40px; }
+    .question { 
+      margin-bottom: 28px; 
+      padding: 25px; 
+      border: 1px solid var(--border); 
+      border-radius: 12px; 
+      background: var(--card); 
+      text-align: left; 
+      min-height: 280px; 
+    }
+    .option { 
+      padding: 14px 16px; 
+      margin: 10px 0; 
+      border: 1px solid var(--border); 
+      border-radius: 8px; 
+      cursor: pointer; 
+      transition: all 0.3s; 
+      text-align: left; 
+    }
+    .option:hover { background: #e3f2fd; border-color: #1e88e5; }
+    .option.selected { background: #1e88e5; color: white; border-color: #1e88e5; }
+
+    button { 
+      background: #1e3a8a; 
+      color: white; 
+      border: none; 
+      padding: 12px 24px; 
+      font-size: 16px; 
+      border-radius: 8px; 
+      cursor: pointer; 
+      margin: 8px 5px; 
+    }
+    button:hover { background: #15306e; }
+    button.submit-btn { background: #d32f2f; padding: 14px 32px; font-size: 18px; }
+
+    .nav-buttons { 
+      display: flex; 
+      justify-content: space-between; 
+      margin-top: 20px; 
+      flex-wrap: wrap; 
+      gap: 10px; 
+    }
+
+    .palette-container { margin: 15px 0 25px 0; position: relative; }
+    .palette-wrapper { 
+      overflow-x: auto; 
+      scroll-behavior: smooth; 
+      padding: 12px 0; 
+      scrollbar-width: none; 
+    }
+    .palette-wrapper::-webkit-scrollbar { display: none; }
+    .question-palette { display: flex; gap: 8px; width: max-content; padding: 0 30px; }
+    .q-btn {
+      min-width: 42px; height: 42px; border: 2px solid var(--border); border-radius: 10px;
+      font-weight: 600; background: var(--card); color: var(--palette-text); cursor: pointer;
+      display: flex; align-items: center; justify-content: center; font-size: 15px;
+      transition: all 0.25s ease;
+    }
+    .q-btn:hover { transform: translateY(-2px) scale(1.08); }
+    .q-btn.answered { background: #1e88e5; color: white; border-color: #1e88e5; }
+    .q-btn.current {
+      border-color: #ff4444; box-shadow: 0 0 0 4px rgba(255,68,68,0.3);
+      transform: scale(1.15); background: #1e3a8a; color: white; font-weight: 700;
+    }
+    .palette-fade {
+      position: absolute; top: 0; bottom: 0; width: 40px; pointer-events: none; z-index: 5;
+    }
+    .palette-fade.left { left: 0; background: linear-gradient(to right, var(--card), transparent); }
+    .palette-fade.right { right: 0; background: linear-gradient(to left, var(--card), transparent); }
+    .palette-arrow {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: #1e3a8a; color: white; border: none;
+      width: 36px; height: 36px; border-radius: 50%; font-size: 18px;
+      cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+    }
+    .palette-arrow:hover { transform: translateY(-50%) scale(1.15); }
+    .palette-arrow.left { left: 8px; }
+    .palette-arrow.right { right: 8px; }
+    .palette-arrow.hidden { opacity: 0; pointer-events: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Start Screen -->
+    <div class="start-screen" id="startScreen">
+      <h2>Welcome to</h2>
+      <div class="institute" style="color:#1e3a8a; font-size:28px; font-weight:bold;">DR SAHITHA IAS ACADEMY</div>
+      <h1>UG-TRB Zoology Test No: 26</h1>
+      <p><strong>Topic:</strong> Synapse, Neuromuscular Junction & Reflex Action</p>
+      <p><strong>Total Questions:</strong> 20 | <strong>Marks:</strong> 20 | <strong>Duration:</strong> 10 Minutes</p>
+      <h3 style="margin-top:30px;">Enter Name of Candidate</h3>
+      <input type="text" id="candidateName" placeholder="Full Name of the Candidate" autocomplete="off" 
+             style="padding:12px; width:80%; max-width:400px; border-radius:8px; border:2px solid #1e3a8a; font-size:16px;">
+      <br><br>
+      <button onclick="startExam()" style="padding:14px 40px; font-size:18px;">Start Exam</button>
+    </div>
+
+    <!-- Quiz Section -->
+    <div class="quiz-container" id="quizSection" style="display:none;">
+      <div class="candidate-name" id="topCandidateName"></div>
+      <button class="lang-toggle" id="langBtn" onclick="toggleLanguage()">தமிழ்</button>
+      <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()">🌙 Dark</button>
+     
+      <div class="timer" id="timer">Time Left: 10:00</div>
+      <div class="progress">Question <span id="currentQ">1</span> of 20</div>
+      
+      <div class="palette-container">
+        <strong>Jump to Question:</strong>
+        <div class="palette-wrapper" id="paletteWrapper">
+          <div class="question-palette" id="questionPalette"></div>
+        </div>
+        <div class="palette-fade left"></div>
+        <div class="palette-fade right"></div>
+        <button class="palette-arrow left" id="leftArrow" onclick="scrollPalette(-180)">◀</button>
+        <button class="palette-arrow right" id="rightArrow" onclick="scrollPalette(180)">▶</button>
+      </div>
+      
+      <div id="quiz"></div>
+      <div class="nav-buttons" id="navButtons"></div>
+    </div>
+
+    <!-- Colorful Result Dashboard -->
+    <div class="result" id="resultSection" style="display:none;">
+      <div class="dashboard">
+        <h2 style="margin:0 0 8px 0;">🎉 Quiz Completed!</h2>
+        <p id="finalCandidateName" style="opacity:0.9; font-size:18px; margin-bottom:20px;"></p>
+
+        <div class="score-circle" id="scoreCircle">
+          <div class="score-inner">
+            <div class="score-value" id="scoreValue">0</div>
+            <div class="score-label">out of 20</div>
+          </div>
+        </div>
+
+        <div class="performance-badge" id="performanceBadge">Performance</div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-number" id="correctCount">0</div>
+            <div>Correct</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="accuracy">0%</div>
+            <div>Accuracy</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="timeTaken">10:00</div>
+            <div>Time Taken</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding: 30px;">
+        <button onclick="restartQuiz()" style="width:100%; padding:16px; font-size:18px; background:#1e3a8a; margin-bottom:30px;">
+          Restart Quiz
+        </button>
+
+        <h3 style="margin:10px 0 20px 0; color:#1e3a8a;">📝 Review Your Answers</h3>
+        <div id="reviewSection"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      { q: "The main purpose of a reflex arc is ____.", qt: "ரிஃப்ளெக்ஸ் ஆர்க்கின் முக்கிய நோக்கம் ____.", options: ["To save time and protect the body","To make us think harder","To grow muscles","To help in digestion only"], optionst: ["நேரத்தை மிச்சப்படுத்தி உடலைப் பாதுகாப்பது","நம்மை அதிகம் சிந்திக்க வைப்பது","தசைகளை வளர்ப்பது","ஜீரணத்திற்கு மட்டும் உதவுவது"], answer: 0 },
+      { q: "Who is known as the \"Father of Conditioned Reflex\"?", qt: "\"நிபந்தனைக்குட்பட்ட ரிஃப்ளெக்ஸ்\"-ன் தந்தை என்று அழைக்கப்படுபவர் யார்?", options: ["Charles Sherrington","Pavlov","Thomas Wharton","Robert Brown"], optionst: ["சார்லஸ் ஷெரிங்டன்","பாவ்லோவ்","தாமஸ் வார்டன்","ராபர்ட் பிரவுன்"], answer: 1 },
+      { q: "The part of the spinal cord where the sensory neuron enters is the ____.", qt: "உணர்வு நியூரான் தண்டுவடத்திற்குள் நுழையும் பகுதி ____ ஆகும்.", options: ["Ventral root","Dorsal root","Gray matter only","White matter only"], optionst: ["வென்ட்ரல் ரூட்","டார்சல் ரூட்","கிரே மேட்டர் மட்டும்","வைட் மேட்டர் மட்டும்"], answer: 1 },
+      { q: "Which synapse allows impulse flow only in one direction?", qt: "எந்த சினேப்ஸ் தூண்டுதல் ஓட்டத்தை ஒரு திசையில் மட்டுமே அனுமதிக்கிறது?", options: ["Electrical","Neither","Both","Chemical"], optionst: ["மின் சினேப்ஸ்","எதுவும் இல்லை","இரண்டும்","வேதியியல் சினேப்ஸ்"], answer: 3 },
+      { q: "Axoaxonic synapse connects ____.", qt: "ஆக்சோஆக்சோனிக் சினேப்ஸ் எதை இணைக்கிறது?", options: ["Axon to Cyton","Axon to Axon","Axon to Dendrite","Dendrite to Cyton"], optionst: ["ஆக்சான் - சைட்டான்","ஆக்சான் - ஆக்சான்","ஆக்சான் - டென்ட்ரைட்","டென்ட்ரைட் - சைட்டான்"], answer: 1 },
+      { q: "What is \"Conjunctival reflex\"?", qt: "\"கண் இமைப்படல ரிஃப்ளெக்ஸ்\" என்பது என்ன?", options: ["Blinking when the cornea/conjunctiva is touched","Running","Crying","Seeing colors"], optionst: ["கார்னியா/கண் இமைப்படலைத் தொட்டால் கண்ணை மூடுவது","ஓடுவது","அழுவது","நிறங்களைப் பார்ப்பது"], answer: 0 },
+      { q: "Which root of the spinal cord has a ganglion?", qt: "தண்டுவடத்தின் எந்த வேரில் கேங்க்லியன் (ganglion) உள்ளது?", options: ["Ventral","Dorsal","Both","Neither"], optionst: ["வென்ட்ரல்","டார்சல்","இரண்டும்","எதுவும் இல்லை"], answer: 1 },
+      { q: "Interneurons are found in the ____.", qt: "இடைநிலை நியூரான்கள் (Interneurons) எங்கே காணப்படுகின்றன?", options: ["Muscles","Skin","Gray matter of the spinal cord","Blood"], optionst: ["தசைகள்","தோல்","தண்டுவடத்தின் கிரே மேட்டர்","இரத்தம்"], answer: 2 },
+      { q: "Acquired reflexes are ____.", qt: "பெறப்பட்ட ரிஃப்ளெக்ஸ்கள் ____ ஆகும்.", options: ["Permanent from birth","Temporary or learned","Found only in plants","Not involving nerves"], optionst: ["பிறப்பிலிருந்தே நிரந்தரமானவை","தற்காலிகமானவை அல்லது கற்றுக்கொண்டவை","தாவரங்களில் மட்டும் காணப்படுபவை","நரம்புகளை உள்ளடக்காதவை"], answer: 1 },
+      { q: "\"Achilles tendon reflex\" is also called ____.", qt: "\"அகிலிஸ் தசைநார் ரிஃப்ளெக்ஸ்\" ____ என்றும் அழைக்கப்படுகிறது.", options: ["Knee jerk","Jaw jerk","Biceps jerk","Ankle jerk"], optionst: ["முழங்கால் ஜெர்க்","தாடை ஜெர்க்","பைசெப்ஸ் ஜெர்க்","கணுக்கால் ஜெர்க்"], answer: 3 },
+      { q: "Which of the following is NOT a component of a reflex arc?", qt: "பின்வருவனவற்றில் எது ரிஃப்ளெக்ஸ் ஆர்க்கின் ஒரு அங்கமல்ல?", options: ["Receptor","Effector","Liver","Sensory neuron"], optionst: ["ரிசெப்டர்","எஃபெக்டர்","லிவர்","உணர்வு நியூரான்"], answer: 2 },
+      { q: "Efferent neuron is another name for ____.", qt: "எஃபெரண்ட் நியூரான் என்பது எதன் மற்றொரு பெயர்?", options: ["Sensory neuron","Motor neuron","Skin cell","Bone cell"], optionst: ["உணர்வு நியூரான்","மோட்டார் நியூரான்","தோல் செல்","எலும்பு செல்"], answer: 1 },
+      { q: "Salivation at the sight of food (mango or tamarind) is an example of ____.", qt: "உணவைப் பார்த்தவுடன் உமிழ்நீர் சுரப்பது எதற்கு உதாரணம்?", options: ["Unconditioned reflex","Conditioned reflex","Voluntary action","Instinct"], optionst: ["நிபந்தனையற்ற ரிஃப்ளெக்ஸ்","நிபந்தனைக்குட்பட்ட ரிஃப்ளெக்ஸ்","விருப்ப செயல்","உள்ளுணர்வு"], answer: 1 },
+      { q: "Which of the following is an effect of a reflex action?", qt: "பின்வருவனவற்றில் எது ரிஃப்ளெக்ஸ் செயலின் விளைவு?", options: ["Fast response to danger","Thinking about a problem","Reading a book","Sleeping"], optionst: ["ஆபத்துக்கு விரைவான பதில்","ஒரு பிரச்சனையைப் பற்றி சிந்திப்பது","புத்தகம் படிப்பது","தூங்குவது"], answer: 0 },
+      { q: "Reflexes help in maintaining ____.", qt: "ரிஃப்ளெக்ஸ்கள் எதைப் பராமரிக்க உதவுகின்றன?", options: ["Memory","High temperature","Hunger","Homeostasis and safety"], optionst: ["நினைவு","உயர் வெப்பநிலை","பசி","ஹோமியோஸ்டாஸிஸ் மற்றும் பாதுகாப்பு"], answer: 3 },
+      { q: "What is the gap between presynaptic and postsynaptic membranes?", qt: "முன்-சினேப்டிக் மற்றும் பின்-சினேப்டிக் சவ்வுகளுக்கு இடையே உள்ள இடைவெளி என்ன?", options: ["20-30 nm (Synaptic cleft)","1 meter","5 cm","1 mm"], optionst: ["20-30 nm (சினாப்டிக் கிளெஃப்ட்)","1 மீட்டர்","5 செ.மீ","1 மி.மீ"], answer: 0 },
+      { q: "Neurotransmitters bind to ____ on the postsynaptic membrane.", qt: "நரம்புக் கடத்திகள் போஸ்ட்-சினேப்டிக் சவ்வில் உள்ள ____ உடன் பிணைகின்றன.", options: ["Enzymes","Receptors","Vesicles","Mitochondria"], optionst: ["என்சைம்கள்","ரிசெப்டர்கள்","வெசிகிள்கள்","மைட்டோகாண்ட்ரியா"], answer: 1 },
+      { q: "What defines a \"superficial reflex\"?", qt: "\"மேற்பரப்பு ரிஃப்ளெக்ஸ்\"-ஐ வரையறுப்பது எது?", options: ["Triggered by stimulating skin/mucous membrane","Triggered by deep bone pain","Voluntary muscle movement","Dreaming"], optionst: ["தோல்/சளி சவ்வைத் தூண்டுவதன் மூலம் தூண்டப்படும்","ஆழமான எலும்பு வலியால் தூண்டப்படும்","விருப்ப தசை இயக்கம்","கனவு காண்பது"], answer: 0 },
+      { q: "\"Vomiting\" is a type of ____ reflex.", qt: "\"வாந்தி எடுத்தல்\" என்பது ஒரு வகை ____ ரிஃப்ளெக்ஸ் ஆகும்.", options: ["Superficial","Visceral/Digestive","Conditioned","Voluntary"], optionst: ["மேற்பரப்பு","உள் உறுப்பு/ஜீரண","நிபந்தனைக்குட்பட்ட","விருப்ப"], answer: 1 },
+      { q: "The junction between two neurons is called a ____.", qt: "இரண்டு நியூரான்களுக்கு இடையிலான சந்திப்பு ____ என்று அழைக்கப்படுகிறது.", options: ["Axon","Dendrite","Synapse","Soma"], optionst: ["ஆக்சான்","டென்ட்ரைட்","சினேப்ஸ்","சோமா"], answer: 2 }
+    ];
+
+    let currentLanguage = 'en';
+    let selectedAnswers = new Array(20).fill(null);
+    let currentQuestionIndex = 0;
+    let timerInterval;
+    let timeLeft = 10 * 60;   // Changed to 10 minutes
+    let candidateName = "";
+    let isDarkMode = false;
+    let quizStartTime = Date.now();
+
+    const DB_NAME = 'UGTRB_Zoology';
+    const STORE_NAME = 'test26_progress';
+    let db = null;
+
+    // IndexedDB Setup
+    function initIndexedDB() {
+      return new Promise((resolve) => {
+        const request = indexedDB.open(DB_NAME, 1);
+        request.onupgradeneeded = (e) => {
+          db = e.target.result;
+          if (!db.objectStoreNames.contains(STORE_NAME)) db.createObjectStore(STORE_NAME);
+        };
+        request.onsuccess = (e) => { db = e.target.result; resolve(true); };
+        request.onerror = () => resolve(false);
+      });
+    }
+
+    async function saveProgress() {
+      const progress = { candidateName, selectedAnswers, currentQuestionIndex, timeLeft, currentLanguage, timestamp: Date.now() };
+      if (db) {
+        try {
+          const tx = db.transaction(STORE_NAME, 'readwrite');
+          tx.objectStore(STORE_NAME).put(progress, 'currentProgress');
+          return;
+        } catch(e) {}
+      }
+      try { sessionStorage.setItem('ugtrb_test26_progress', JSON.stringify(progress)); } catch(e) {}
+    }
+
+    async function loadProgress() {
+      if (db) {
+        try {
+          const tx = db.transaction(STORE_NAME, 'readonly');
+          const request = tx.objectStore(STORE_NAME).get('currentProgress');
+          return new Promise(resolve => {
+            request.onsuccess = () => {
+              if (request.result) {
+                const p = request.result;
+                candidateName = p.candidateName || "";
+                selectedAnswers = p.selectedAnswers || new Array(20).fill(null);
+                currentQuestionIndex = p.currentQuestionIndex || 0;
+                timeLeft = p.timeLeft || 10 * 60;
+                currentLanguage = p.currentLanguage || 'en';
+                resolve(true);
+              } else resolve(false);
+            };
+          });
+        } catch(e) {}
+      }
+      try {
+        const saved = sessionStorage.getItem('ugtrb_test26_progress');
+        if (saved) {
+          const p = JSON.parse(saved);
+          candidateName = p.candidateName || "";
+          selectedAnswers = p.selectedAnswers || new Array(20).fill(null);
+          currentQuestionIndex = p.currentQuestionIndex || 0;
+          timeLeft = p.timeLeft || 10 * 60;
+          currentLanguage = p.currentLanguage || 'en';
+          return true;
+        }
+      } catch(e) {}
+      return false;
+    }
+
+    function clearProgress() {
+      if (db) try { db.transaction(STORE_NAME, 'readwrite').objectStore(STORE_NAME).delete('currentProgress'); } catch(e) {}
+      try { sessionStorage.removeItem('ugtrb_test26_progress'); } catch(e) {}
+    }
+
+    function toggleTheme() {
+      isDarkMode = !isDarkMode;
+      document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+      document.getElementById('themeBtn').textContent = isDarkMode ? '☀️ Light' : '🌙 Dark';
+    }
+
+    function startExam() {
+      candidateName = document.getElementById('candidateName').value.trim();
+      if (!candidateName) return alert("Please enter the Name of the Candidate.");
+      
+      document.getElementById('startScreen').style.display = 'none';
+      document.getElementById('quizSection').style.display = 'block';
+      document.getElementById('topCandidateName').textContent = "Candidate: " + candidateName;
+      quizStartTime = Date.now();
+      renderCurrentQuestion();
+      startTimer();
+      saveProgress();
+    }
+
+    function toggleLanguage() {
+      currentLanguage = currentLanguage === 'en' ? 'ta' : 'en';
+      document.getElementById('langBtn').textContent = currentLanguage === 'en' ? 'தமிழ்' : 'English';
+      renderCurrentQuestion();
+      saveProgress();
+    }
+
+    function createQuestionPalette() {
+      const palette = document.getElementById('questionPalette');
+      palette.innerHTML = '';
+      for (let i = 0; i < 20; i++) {
+        const btn = document.createElement('button');
+        btn.className = 'q-btn';
+        btn.textContent = i + 1;
+        if (selectedAnswers[i] !== null) btn.classList.add('answered');
+        if (i === currentQuestionIndex) btn.classList.add('current');
+        btn.onclick = () => { currentQuestionIndex = i; renderCurrentQuestion(); saveProgress(); };
+        palette.appendChild(btn);
+      }
+      updateArrowVisibility();
+    }
+
+    function updateArrowVisibility() {
+      const left = document.getElementById('leftArrow');
+      const right = document.getElementById('rightArrow');
+      const wrapper = document.getElementById('paletteWrapper');
+      left.classList.toggle('hidden', wrapper.scrollLeft <= 10);
+      right.classList.toggle('hidden', wrapper.scrollLeft + wrapper.clientWidth >= wrapper.scrollWidth - 10);
+    }
+
+    function scrollPalette(amount) {
+      const wrapper = document.getElementById('paletteWrapper');
+      wrapper.scrollBy({ left: amount, behavior: 'smooth' });
+      setTimeout(updateArrowVisibility, 400);
+    }
+
+    function updateNavigationButtons() {
+      const nav = document.getElementById('navButtons');
+      let html = `<button onclick="prevQuestion()">← Previous</button>`;
+      if (currentQuestionIndex < 19) {
+        html += `<button onclick="nextQuestion()">Next →</button>`;
+      } else {
+        html += `<button onclick="submitQuiz()" class="submit-btn">Submit Final</button>`;
+      }
+      nav.innerHTML = html;
+    }
+
+    function autoScrollToCurrent() {
+      const wrapper = document.getElementById('paletteWrapper');
+      const buttons = document.querySelectorAll('.q-btn');
+      const currentBtn = Array.from(buttons).find(btn => btn.classList.contains('current'));
+      if (currentBtn) currentBtn.scrollIntoView({ behavior: 'smooth', inline: 'center' });
+    }
+
+    function renderCurrentQuestion() {
+      const q = questions[currentQuestionIndex];
+      const text = currentLanguage === 'en' ? q.q : q.qt;
+      const opts = currentLanguage === 'en' ? q.options : q.optionst;
+
+      let html = `
+        <div class="question">
+          <div style="font-weight:bold; color:#1e3a8a; margin-bottom:12px;">Question ${currentQuestionIndex + 1} of 20</div>
+          <p><strong>${text}</strong></p>
+          <div>
+            ${opts.map((opt, j) => `
+              <div class="option ${selectedAnswers[currentQuestionIndex] === j ? 'selected' : ''}" 
+                   onclick="selectAnswer(${j})">
+                ${String.fromCharCode(65 + j)}) ${opt}
+              </div>`).join('')}
+          </div>
+        </div>`;
+
+      document.getElementById('quiz').innerHTML = html;
+      document.getElementById('currentQ').textContent = currentQuestionIndex + 1;
+      createQuestionPalette();
+      updateNavigationButtons();
+      setTimeout(autoScrollToCurrent, 100);
+    }
+
+    function selectAnswer(optionIndex) {
+      selectedAnswers[currentQuestionIndex] = optionIndex;
+      renderCurrentQuestion();
+      saveProgress();
+    }
+
+    function nextQuestion() {
+      if (currentQuestionIndex < 19) {
+        currentQuestionIndex++;
+        renderCurrentQuestion();
+        saveProgress();
+      }
+    }
+
+    function prevQuestion() {
+      if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        renderCurrentQuestion();
+        saveProgress();
+      }
+    }
+
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        const min = Math.floor(timeLeft / 60);
+        const sec = timeLeft % 60;
+        document.getElementById('timer').textContent = `Time Left: ${min}:${sec < 10 ? '0' : ''}${sec}`;
+        saveProgress();
+        if (timeLeft <= 0) submitQuiz();
+      }, 1000);
+    }
+
+    function submitQuiz() {
+      if (timerInterval) clearInterval(timerInterval);
+      clearProgress();
+
+      let score = 0;
+      questions.forEach((q, i) => { if (selectedAnswers[i] === q.answer) score++; });
+
+      const percentage = ((score / 20) * 100).toFixed(1);
+      const timeTakenSec = Math.floor((Date.now() - quizStartTime) / 1000);
+      const min = Math.floor(timeTakenSec / 60);
+      const sec = timeTakenSec % 60;
+
+      document.getElementById('quizSection').style.display = 'none';
+      document.getElementById('resultSection').style.display = 'block';
+
+      document.getElementById('scoreCircle').style.setProperty('--progress', `${percentage}%`);
+      document.getElementById('scoreValue').textContent = score;
+      document.getElementById('finalCandidateName').textContent = candidateName;
+
+      const badge = document.getElementById('performanceBadge');
+      if (score >= 15) {
+        badge.textContent = "🌟 Excellent Performance!";
+        badge.className = "performance-badge badge-excellent";
+      } else if (score >= 10) {
+        badge.textContent = "👍 Good Job!";
+        badge.className = "performance-badge badge-good";
+      } else {
+        badge.textContent = "📚 Needs Improvement";
+        badge.className = "performance-badge badge-improve";
+      }
+
+      document.getElementById('correctCount').textContent = score;
+      document.getElementById('accuracy').textContent = percentage + "%";
+      document.getElementById('timeTaken').textContent = `${min}:${sec.toString().padStart(2, '0')}`;
+
+      let reviewHTML = questions.map((q, i) => {
+        const isCorrect = selectedAnswers[i] === q.answer;
+        return `
+          <div class="question" style="border-left: 6px solid ${isCorrect ? '#22c55e' : '#ef4444'};">
+            <p><strong>Q${i+1}: ${currentLanguage === 'en' ? q.q : q.qt}</strong></p>
+            <p>Your Answer: <strong>${selectedAnswers[i] !== null ? 
+              String.fromCharCode(65 + selectedAnswers[i]) + ") " + 
+              (currentLanguage === 'en' ? q.options[selectedAnswers[i]] : q.optionst[selectedAnswers[i]]) 
+              : "Not Answered"}</strong></p>
+            <p style="color:${isCorrect ? 'green' : 'red'}">Correct: ${String.fromCharCode(65 + q.answer) + ") " + 
+              (currentLanguage === 'en' ? q.options[q.answer] : q.optionst[q.answer])}</p>
+          </div>`;
+      }).join('');
+      document.getElementById('reviewSection').innerHTML = reviewHTML;
+    }
+
+    function restartQuiz() {
+      if (!confirm("Do you want to restart the exam?")) return;
+      clearProgress();
+      location.reload();
+    }
+
+    // Keyboard Navigation
+    document.addEventListener('keydown', (e) => {
+      if (document.getElementById('resultSection').style.display === 'block') return;
+      if (e.key === 'ArrowRight') nextQuestion();
+      if (e.key === 'ArrowLeft') prevQuestion();
+      if (e.key === 'Enter' && currentQuestionIndex === 19) submitQuiz();
+    });
+
+    function initPaletteScroll() {
+      const wrapper = document.getElementById('paletteWrapper');
+      wrapper.addEventListener('scroll', updateArrowVisibility);
+    }
+
+    // Initialize
+    window.onload = async () => {
+      initPaletteScroll();
+      await initIndexedDB();
+      const hasSaved = await loadProgress();
+
+      if (hasSaved && candidateName) {
+        document.getElementById('startScreen').style.display = 'none';
+        document.getElementById('quizSection').style.display = 'block';
+        document.getElementById('topCandidateName').textContent = "Candidate: " + candidateName;
+        renderCurrentQuestion();
+        startTimer();
+      }
+    };
+
+    window.addEventListener('beforeunload', () => {
+      if (document.getElementById('quizSection').style.display !== 'none') saveProgress();
+    });
+  </script>
+</body>
+</html>

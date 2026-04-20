@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#1e3a8a">
+  <title>DR SAHITHA IAS ACADEMY - UG-TRB Zoology Test-27</title>
+  <style>
+    :root {
+      --bg: linear-gradient(135deg, #f0f4f8, #d9e4f0);
+      --card: #fff;
+      --text: #333;
+      --border: #ddd;
+      --palette-text: #1e3a8a;
+    }
+    [data-theme="dark"] {
+      --bg: linear-gradient(135deg, #1a2338, #0f172a);
+      --card: #1e2937;
+      --text: #e2e8f0;
+      --border: #475569;
+      --palette-text: #60a5fa;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      margin: 0;
+      padding: 20px;
+      color: var(--text);
+    }
+    .container {
+      max-width: 950px;
+      margin: 0 auto;
+      background: var(--card);
+      border-radius: 20px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.18);
+      overflow: hidden;
+    }
+    .dashboard {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 40px 30px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .dashboard::before {
+      content: '';
+      position: absolute;
+      top: -80px;
+      right: -80px;
+      width: 300px;
+      height: 300px;
+      background: rgba(255,255,255,0.12);
+      border-radius: 50%;
+    }
+    .dashboard-header {
+      margin-bottom: 15px;
+    }
+    .test-info {
+      font-size: 16px;
+      opacity: 0.95;
+      margin: 8px 0;
+    }
+    .score-circle {
+      width: 170px;
+      height: 170px;
+      border-radius: 50%;
+      background: conic-gradient(#22c55e 0% var(--progress), #e2e8f0 var(--progress) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 20px auto;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    .score-inner {
+      width: 130px;
+      height: 130px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #1e3a8a;
+    }
+    .score-value { font-size: 48px; font-weight: bold; line-height: 1; }
+    .score-label { font-size: 14px; opacity: 0.8; margin-top: 4px; }
+    .performance-badge {
+      padding: 12px 30px;
+      border-radius: 50px;
+      font-weight: bold;
+      font-size: 18px;
+      display: inline-block;
+      margin: 15px 0;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    }
+    .badge-excellent { background: #22c55e; color: white; }
+    .badge-good { background: #eab308; color: #1e3a8a; }
+    .badge-improve { background: #ef4444; color: white; }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 15px;
+      margin-top: 30px;
+    }
+    .stat-card {
+      background: rgba(255,255,255,0.18);
+      padding: 20px 15px;
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+    }
+    .stat-number {
+      font-size: 32px;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+    .lang-toggle, .theme-toggle {
+      position: absolute; top: 25px; padding: 10px 20px; border-radius: 25px;
+      cursor: pointer; font-weight: bold; z-index: 100;
+    }
+    .lang-toggle { right: 140px; background: white; color: #1e3a8a; border: 2px solid #1e3a8a; }
+    .theme-toggle { right: 25px; background: #1e3a8a; color: white; border: none; }
+    .candidate-name {
+      position: absolute; top: 25px; left: 25px; font-weight: bold;
+      color: #1e3a8a; background: rgba(255,255,255,0.9); padding: 8px 16px;
+      border-radius: 25px; border: 2px solid #1e3a8a; z-index: 10;
+    }
+    [data-theme="dark"] .candidate-name {
+      background: rgba(30, 58, 138, 0.9); color: white; border-color: #60a5fa;
+    }
+    .timer {
+      font-size: 24px;
+      font-weight: bold;
+      color: #ff4444;
+      background: rgba(255,255,255,0.2);
+      padding: 12px 30px;
+      border-radius: 50px;
+      display: inline-block;
+      margin: 15px 0;
+    }
+    .start-screen, .quiz-container, .result { padding: 40px; }
+    .question {
+      margin-bottom: 28px;
+      padding: 25px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--card);
+      text-align: left;
+      min-height: 280px;
+    }
+    .option {
+      padding: 14px 16px;
+      margin: 10px 0;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-align: left;
+    }
+    .option:hover { background: #e3f2fd; border-color: #1e88e5; }
+    .option.selected { background: #1e88e5; color: white; border-color: #1e88e5; }
+    button {
+      background: #1e3a8a;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 8px 5px;
+    }
+    button:hover { background: #15306e; }
+    button.submit-btn { background: #d32f2f; padding: 14px 32px; font-size: 18px; }
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .palette-container { margin: 15px 0 25px 0; position: relative; }
+    .palette-wrapper {
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      padding: 12px 0;
+      scrollbar-width: none;
+    }
+    .palette-wrapper::-webkit-scrollbar { display: none; }
+    .question-palette { display: flex; gap: 8px; width: max-content; padding: 0 30px; }
+    .q-btn {
+      min-width: 42px; height: 42px; border: 2px solid var(--border); border-radius: 10px;
+      font-weight: 600; background: var(--card); color: var(--palette-text); cursor: pointer;
+      display: flex; align-items: center; justify-content: center; font-size: 15px;
+      transition: all 0.25s ease;
+    }
+    .q-btn:hover { transform: translateY(-2px) scale(1.08); }
+    .q-btn.answered { background: #1e88e5; color: white; border-color: #1e88e5; }
+    .q-btn.current {
+      border-color: #ff4444; box-shadow: 0 0 0 4px rgba(255,68,68,0.3);
+      transform: scale(1.15); background: #1e3a8a; color: white; font-weight: 700;
+    }
+    .palette-fade {
+      position: absolute; top: 0; bottom: 0; width: 40px; pointer-events: none; z-index: 5;
+    }
+    .palette-fade.left { left: 0; background: linear-gradient(to right, var(--card), transparent); }
+    .palette-fade.right { right: 0; background: linear-gradient(to left, var(--card), transparent); }
+    .palette-arrow {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: #1e3a8a; color: white; border: none;
+      width: 36px; height: 36px; border-radius: 50%; font-size: 18px;
+      cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+    }
+    .palette-arrow:hover { transform: translateY(-50%) scale(1.15); }
+    .palette-arrow.left { left: 8px; }
+    .palette-arrow.right { right: 8px; }
+    .palette-arrow.hidden { opacity: 0; pointer-events: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Start Screen -->
+    <div class="start-screen" id="startScreen">
+      <h2>Welcome to</h2>
+      <div class="institute" style="color:#1e3a8a; font-size:28px; font-weight:bold;">DR SAHITHA IAS ACADEMY</div>
+      <h1>UG-TRB Zoology Test No: 27</h1>
+      <p><strong>Topic:</strong> Photoreceptor, Phonoreceptor, Chemoreceptor</p>
+      <p><strong>Date:</strong> 22/04/2026 | <strong>Duration:</strong> 15 Minutes | <strong>Marks:</strong> 20</p>
+      <h3 style="margin-top:30px;">Enter Name of Candidate</h3>
+      <input type="text" id="candidateName" placeholder="Full Name of the Candidate" autocomplete="off"
+             style="padding:12px; width:80%; max-width:400px; border-radius:8px; border:2px solid #1e3a8a; font-size:16px;">
+      <br><br>
+      <button onclick="startExam()" style="padding:14px 40px; font-size:18px;">Start Exam</button>
+    </div>
+
+    <!-- Quiz Section -->
+    <div class="quiz-container" id="quizSection" style="display:none;">
+      <div class="candidate-name" id="topCandidateName"></div>
+      <button class="lang-toggle" id="langBtn" onclick="toggleLanguage()">தமிழ்</button>
+      <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()">🌙 Dark</button>
+    
+      <div class="timer" id="timer">Time Left: 15:00</div>
+      <div class="progress">Question <span id="currentQ">1</span> of 20</div>
+     
+      <div class="palette-container">
+        <strong>Jump to Question:</strong>
+        <div class="palette-wrapper" id="paletteWrapper">
+          <div class="question-palette" id="questionPalette"></div>
+        </div>
+        <div class="palette-fade left"></div>
+        <div class="palette-fade right"></div>
+        <button class="palette-arrow left" id="leftArrow" onclick="scrollPalette(-180)">◀</button>
+        <button class="palette-arrow right" id="rightArrow" onclick="scrollPalette(180)">▶</button>
+      </div>
+     
+      <div id="quiz"></div>
+      <div class="nav-buttons" id="navButtons"></div>
+    </div>
+
+    <!-- Result Section -->
+    <div class="result" id="resultSection" style="display:none;">
+      <div class="dashboard">
+        <div class="dashboard-header">
+          <h2 style="margin:0 0 8px 0;">🎉 Quiz Completed!</h2>
+          <div class="test-info">UG-TRB Zoology Test No: 27</div>
+          <div class="test-info">Date: 22/04/2026</div>
+          <p id="finalCandidateName" style="opacity:0.95; font-size:18px; margin:15px 0 10px 0;"></p>
+        </div>
+        <div class="score-circle" id="scoreCircle">
+          <div class="score-inner">
+            <div class="score-value" id="scoreValue">0</div>
+            <div class="score-label">out of 20</div>
+          </div>
+        </div>
+        <div class="performance-badge" id="performanceBadge">Performance</div>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-number" id="correctCount">0</div>
+            <div>Correct Answers</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="accuracy">0%</div>
+            <div>Accuracy</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="timeTaken">15:00</div>
+            <div>Time Taken</div>
+          </div>
+        </div>
+      </div>
+      <div style="padding: 30px;">
+        <button onclick="restartQuiz()" style="width:100%; padding:16px; font-size:18px; background:#1e3a8a; margin-bottom:30px;">
+          Restart Quiz
+        </button>
+        <h3 style="margin:10px 0 20px 0; color:#1e3a8a;">📝 Review Your Answers</h3>
+        <div id="reviewSection"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      { q: "The socket of bones that protects the eye is called ____.", qt: "கண்ணைப் பாதுகாக்கும் எலும்புக்குழி ____ எனப்படும்.", options: ["Optic cup","Orbit","Sclera","Fovea"], optionst: ["ஆப்டிக் கப்","ஆர்பிட்","ஸ்க்லெரா","ஃபோவியா"], answer: 1 },
+      { q: "Which coat forms the \"white of the eye\"?", qt: "எந்த அடுக்கு \"கண்ணின் வெள்ளைப்பகுதி\"யை உருவாக்குகிறது?", options: ["Choroid","Retina","Sclera","Conjunctiva"], optionst: ["கோராய்டு","ரெட்டினா","ஸ்க்லெரா","கான்ஜங்க்டிவா"], answer: 2 },
+      { q: "The opening in the center of the iris is called the ____.", qt: "ஐரிஸின் மையத்தில் உள்ள துளை ____ எனப்படும்.", options: ["Pupil","Lens","Fovea","Blind spot"], optionst: ["பியூபில்","லென்ஸ்","ஃபோவியா","பிளைண்ட் ஸ்பாட்"], answer: 0 },
+      { q: "Where is the image formed in the eye?", qt: "கண்ணில் பிம்பம் எங்கே உருவாகிறது?", options: ["Choroid","Sclera","Retina","Vitreous humor"], optionst: ["கோராய்டு","ஸ்க்லெரா","ரெட்டினா","விட்ரியஸ் ஹ்யூமர்"], answer: 2 },
+      { q: "Hypermetropia is corrected using a ____.", qt: "ஹைப்பர்மெட்ரோபியா ____ பயன்படுத்தி சரிசெய்யப்படுகிறது.", options: ["Concave lens","Convex lens","Plain glass","Dark lens"], optionst: ["கான்கேவ் லென்ஸ்","கான்வெக்ஸ் லென்ஸ்","ப்ளைன் கிளாஸ்","டார்க் லென்ஸ்"], answer: 1 },
+      { q: "Which is the smallest bone in the human body?", qt: "மனித உடலின் மிகச்சிறிய எலும்பு எது?", options: ["Malleus","Incus","Stapes","Femur"], optionst: ["மாலியஸ்","இன்கஸ்","ஸ்டேப்ஸ்","ஃபீமர்"], answer: 2 },
+      { q: "The actual organ of hearing located in the cochlea is ____.", qt: "காக்ளியாவில் அமைந்துள்ள உண்மையான கேட்டல் உறுப்பு ____ ஆகும்.", options: ["Organ of Corti","Ampulla","Pinna","Ossicle"], optionst: ["கார்டி உறுப்பு","ஆம்புல்லா","பின்னா","ஆஸிகிள்"], answer: 0 },
+      { q: "How many semicircular canals are present in each ear?", qt: "ஒவ்வொரு செவியிலும் எத்தனை அரைவட்டக் கால்வாய்கள் உள்ளன?", options: ["1","2","3","4"], optionst: ["1","2","3","4"], answer: 2 },
+      { q: "Which nerve carries sound impulses to the brain?", qt: "ஒலித் தூண்டல்களை மூளைக்குக் கொண்டு செல்லும் நரம்பு எது?", options: ["Optic nerve","Auditory (Cochlear) nerve","Olfactory nerve","Vagus nerve"], optionst: ["ஆப்டிக் நரம்பு","ஆடிட்டரி (காக்ளியர்) நரம்பு","ஆல்ஃபாக்டரி நரம்பு","வேகஸ் நரம்பு"], answer: 1 },
+      { q: "Static equilibrium is maintained by ____.", qt: "நிலைச் சமநிலை எதனால் பராமரிக்கப்படுகிறது?", options: ["Utriculus and Sacculus","Semicircular canals","Pinna","Malleus"], optionst: ["யூட்ரிகுலஸ் மற்றும் சாக்குலஸ்","அரைவட்டக் கால்வாய்கள்","பின்னா","மாலியஸ்"], answer: 0 },
+      { q: "The lens of the eye is ____.", qt: "கண் லென்ஸ் என்பது ____.", options: ["Opaque and rigid","Transparent and biconvex","Concave and colored","Liquid-filled only"], optionst: ["ஒளி ஊடுருவாத மற்றும் கடினமான","ஒளி ஊடுருவக்கூடிய மற்றும் இரு-குவிந்த","கான்கேவ் மற்றும் வண்ணமுள்ள","திரவம் நிரம்பியது மட்டும்"], answer: 1 },
+      { q: "The pigment in the choroid prevents ____ of light.", qt: "கோராய்டில் உள்ள நிறமி ஒளியின் ____-ஐத் தடுக்கிறது.", options: ["Refraction","Scattering (Reflection)","Absorption","Transmission"], optionst: ["ஒளிவிலக்கம்","சிதறல் (பிரதிபலிப்பு)","உறிஞ்சுதல்","பரவுதல்"], answer: 1 },
+      { q: "\"Visual Purple\" refers to ____.", qt: "\"விஷுவல் பர்பிள்\" என்பது ____-ஐக் குறிக்கிறது.", options: ["Iodopsin","Biliverdin","Melanin","Rhodopsin"], optionst: ["ஐயோடாப்சின்","பைலிவெர்டின்","மெலனின்","ரோடாப்சின்"], answer: 3 },
+      { q: "Astigmatism is corrected by ____.", qt: "அஸ்டிஜிமாடிசம் ____-ஆல் சரிசெய்யப்படுகிறது.", options: ["Convex lens","Cylindrical lens","Concave lens","Surgery only"], optionst: ["கான்வெக்ஸ் லென்ஸ்","சிலிண்ட்ரிக்கல் லென்ஸ்","கான்கேவ் லென்ஸ்","அறுவை சிகிச்சை மட்டும்"], answer: 1 },
+      { q: "What holds the lens in place?", qt: "லென்ஸை அதன் இடத்தில் நிலைநிறுத்துவது எது?", options: ["Iris","Pupil","Optic nerve","Suspensory ligaments"], optionst: ["ஐரிஸ்","பியூபில்","ஆப்டிக் நரம்பு","சஸ்பென்சரி லிகமெண்ட்ஸ்"], answer: 3 },
+      { q: "Which part of the ear contains the \"Rods of Corti\"?", qt: "செவியின் எந்தப் பகுதியில் \"கார்டி கம்பிகள்\" உள்ளன?", options: ["Middle ear","Inner ear (Organ of Corti)","Pinna","Eustachian tube"], optionst: ["நடு செவி","உள் செவி (கார்டி உறுப்பு)","பின்னா","யூஸ்டாசியன் குழாய்"], answer: 1 },
+      { q: "What is the function of the \"rods of Corti\"?", qt: "\"கார்டி கம்பிகளின்\" செயல்பாடு என்ன?", options: ["Hearing sound","Supporting the reticular lamina","Equalizing pressure","Protecting the ear"], optionst: ["ஒலியைக் கேட்பது","ரெட்டிகுலர் லாமினாவைத் தாங்குவது","அழுத்தத்தை சமப்படுத்துவது","செவியைப் பாதுகாப்பது"], answer: 1 },
+      { q: "The \"stirrup\" bone is ____.", qt: "\"அங்கவடி\" எலும்பு ____ ஆகும்.", options: ["Malleus","Incus","Stapes","Ampulla"], optionst: ["மாலியஸ்","இன்கஸ்","ஸ்டேப்ஸ்","ஆம்புல்லா"], answer: 2 },
+      { q: "Hypermetropia is also called ____.", qt: "ஹைப்பர்மெட்ரோபியா ____ என்றும் அழைக்கப்படுகிறது.", options: ["Short sight","Long sight","Night sight","No sight"], optionst: ["குறுகிய பார்வை","நீண்ட பார்வை","இரவு பார்வை","பார்வையின்மை"], answer: 1 },
+      { q: "Which of these is NOT an ear ossicle?", qt: "இவற்றில் எது செவி எலும்பு அல்ல?", options: ["Malleus","Incus","Femur","Stapes"], optionst: ["மாலியஸ்","இன்கஸ்","ஃபீமர்","ஸ்டேப்ஸ்"], answer: 2 }
+    ];
+
+    let currentLanguage = 'en';
+    let selectedAnswers = new Array(20).fill(null);
+    let currentQuestionIndex = 0;
+    let timerInterval;
+    let timeLeft = 15 * 60;
+    let candidateName = "";
+    let isDarkMode = false;
+    let quizStartTime = Date.now();
+
+    const DB_NAME = 'UGTRB_Zoology';
+    const STORE_NAME = 'test27_progress';
+    let db = null;
+
+    // IndexedDB Setup
+    function initIndexedDB() {
+      return new Promise((resolve) => {
+        const request = indexedDB.open(DB_NAME, 1);
+        request.onupgradeneeded = (e) => {
+          db = e.target.result;
+          if (!db.objectStoreNames.contains(STORE_NAME)) db.createObjectStore(STORE_NAME);
+        };
+        request.onsuccess = (e) => { db = e.target.result; resolve(true); };
+        request.onerror = () => resolve(false);
+      });
+    }
+
+    async function saveProgress() {
+      const progress = { candidateName, selectedAnswers, currentQuestionIndex, timeLeft, currentLanguage, timestamp: Date.now() };
+      if (db) {
+        try {
+          const tx = db.transaction(STORE_NAME, 'readwrite');
+          tx.objectStore(STORE_NAME).put(progress, 'currentProgress');
+          return;
+        } catch(e) {}
+      }
+      try { sessionStorage.setItem('ugtrb_test27_progress', JSON.stringify(progress)); } catch(e) {}
+    }
+
+    async function loadProgress() {
+      if (db) {
+        try {
+          const tx = db.transaction(STORE_NAME, 'readonly');
+          const request = tx.objectStore(STORE_NAME).get('currentProgress');
+          return new Promise(resolve => {
+            request.onsuccess = () => {
+              if (request.result) {
+                const p = request.result;
+                candidateName = p.candidateName || "";
+                selectedAnswers = p.selectedAnswers || new Array(20).fill(null);
+                currentQuestionIndex = p.currentQuestionIndex || 0;
+                timeLeft = p.timeLeft || 15 * 60;
+                currentLanguage = p.currentLanguage || 'en';
+                resolve(true);
+              } else resolve(false);
+            };
+          });
+        } catch(e) {}
+      }
+      try {
+        const saved = sessionStorage.getItem('ugtrb_test27_progress');
+        if (saved) {
+          const p = JSON.parse(saved);
+          candidateName = p.candidateName || "";
+          selectedAnswers = p.selectedAnswers || new Array(20).fill(null);
+          currentQuestionIndex = p.currentQuestionIndex || 0;
+          timeLeft = p.timeLeft || 15 * 60;
+          currentLanguage = p.currentLanguage || 'en';
+          return true;
+        }
+      } catch(e) {}
+      return false;
+    }
+
+    function clearProgress() {
+      if (db) try { db.transaction(STORE_NAME, 'readwrite').objectStore(STORE_NAME).delete('currentProgress'); } catch(e) {}
+      try { sessionStorage.removeItem('ugtrb_test27_progress'); } catch(e) {}
+    }
+
+    function toggleTheme() {
+      isDarkMode = !isDarkMode;
+      document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+      document.getElementById('themeBtn').textContent = isDarkMode ? '☀️ Light' : '🌙 Dark';
+    }
+
+    function startExam() {
+      candidateName = document.getElementById('candidateName').value.trim();
+      if (!candidateName) return alert("Please enter the Name of the Candidate.");
+     
+      document.getElementById('startScreen').style.display = 'none';
+      document.getElementById('quizSection').style.display = 'block';
+      document.getElementById('topCandidateName').textContent = "Candidate: " + candidateName;
+      quizStartTime = Date.now();
+      renderCurrentQuestion();
+      startTimer();
+      saveProgress();
+    }
+
+    function toggleLanguage() {
+      currentLanguage = currentLanguage === 'en' ? 'ta' : 'en';
+      document.getElementById('langBtn').textContent = currentLanguage === 'en' ? 'தமிழ்' : 'English';
+      renderCurrentQuestion();
+      saveProgress();
+    }
+
+    function createQuestionPalette() {
+      const palette = document.getElementById('questionPalette');
+      palette.innerHTML = '';
+      for (let i = 0; i < 20; i++) {
+        const btn = document.createElement('button');
+        btn.className = 'q-btn';
+        btn.textContent = i + 1;
+        if (selectedAnswers[i] !== null) btn.classList.add('answered');
+        if (i === currentQuestionIndex) btn.classList.add('current');
+        btn.onclick = () => { currentQuestionIndex = i; renderCurrentQuestion(); saveProgress(); };
+        palette.appendChild(btn);
+      }
+      updateArrowVisibility();
+    }
+
+    function updateArrowVisibility() {
+      const left = document.getElementById('leftArrow');
+      const right = document.getElementById('rightArrow');
+      const wrapper = document.getElementById('paletteWrapper');
+      left.classList.toggle('hidden', wrapper.scrollLeft <= 10);
+      right.classList.toggle('hidden', wrapper.scrollLeft + wrapper.clientWidth >= wrapper.scrollWidth - 10);
+    }
+
+    function scrollPalette(amount) {
+      const wrapper = document.getElementById('paletteWrapper');
+      wrapper.scrollBy({ left: amount, behavior: 'smooth' });
+      setTimeout(updateArrowVisibility, 400);
+    }
+
+    function updateNavigationButtons() {
+      const nav = document.getElementById('navButtons');
+      let html = `<button onclick="prevQuestion()">← Previous</button>`;
+      if (currentQuestionIndex < 19) {
+        html += `<button onclick="nextQuestion()">Next →</button>`;
+      } else {
+        html += `<button onclick="submitQuiz()" class="submit-btn">Submit Final</button>`;
+      }
+      nav.innerHTML = html;
+    }
+
+    function autoScrollToCurrent() {
+      const wrapper = document.getElementById('paletteWrapper');
+      const buttons = document.querySelectorAll('.q-btn');
+      const currentBtn = Array.from(buttons).find(btn => btn.classList.contains('current'));
+      if (currentBtn) currentBtn.scrollIntoView({ behavior: 'smooth', inline: 'center' });
+    }
+
+    function renderCurrentQuestion() {
+      const q = questions[currentQuestionIndex];
+      const text = currentLanguage === 'en' ? q.q : q.qt;
+      const opts = currentLanguage === 'en' ? q.options : q.optionst;
+      let html = `
+        <div class="question">
+          <div style="font-weight:bold; color:#1e3a8a; margin-bottom:12px;">Question ${currentQuestionIndex + 1} of 20</div>
+          <p><strong>${text}</strong></p>
+          <div>
+            ${opts.map((opt, j) => `
+              <div class="option ${selectedAnswers[currentQuestionIndex] === j ? 'selected' : ''}"
+                   onclick="selectAnswer(${j})">
+                ${String.fromCharCode(65 + j)}) ${opt}
+              </div>`).join('')}
+          </div>
+        </div>`;
+      document.getElementById('quiz').innerHTML = html;
+      document.getElementById('currentQ').textContent = currentQuestionIndex + 1;
+      createQuestionPalette();
+      updateNavigationButtons();
+      setTimeout(autoScrollToCurrent, 100);
+    }
+
+    function selectAnswer(optionIndex) {
+      selectedAnswers[currentQuestionIndex] = optionIndex;
+      renderCurrentQuestion();
+      saveProgress();
+    }
+
+    function nextQuestion() {
+      if (currentQuestionIndex < 19) {
+        currentQuestionIndex++;
+        renderCurrentQuestion();
+        saveProgress();
+      }
+    }
+
+    function prevQuestion() {
+      if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        renderCurrentQuestion();
+        saveProgress();
+      }
+    }
+
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        const min = Math.floor(timeLeft / 60);
+        const sec = timeLeft % 60;
+        document.getElementById('timer').textContent = `Time Left: ${min}:${sec < 10 ? '0' : ''}${sec}`;
+        saveProgress();
+        if (timeLeft <= 0) submitQuiz();
+      }, 1000);
+    }
+
+    function submitQuiz() {
+      if (timerInterval) clearInterval(timerInterval);
+      clearProgress();
+      let score = 0;
+      questions.forEach((q, i) => { if (selectedAnswers[i] === q.answer) score++; });
+      const percentage = ((score / 20) * 100).toFixed(1);
+      const timeTakenSec = Math.floor((Date.now() - quizStartTime) / 1000);
+      const min = Math.floor(timeTakenSec / 60);
+      const sec = timeTakenSec % 60;
+
+      document.getElementById('quizSection').style.display = 'none';
+      document.getElementById('resultSection').style.display = 'block';
+      document.getElementById('scoreCircle').style.setProperty('--progress', `${percentage}%`);
+      document.getElementById('scoreValue').textContent = score;
+      document.getElementById('finalCandidateName').textContent = candidateName;
+
+      const badge = document.getElementById('performanceBadge');
+      if (score >= 15) {
+        badge.textContent = "🌟 Excellent Performance!";
+        badge.className = "performance-badge badge-excellent";
+      } else if (score >= 10) {
+        badge.textContent = "👍 Good Job!";
+        badge.className = "performance-badge badge-good";
+      } else {
+        badge.textContent = "📚 Needs Improvement";
+        badge.className = "performance-badge badge-improve";
+      }
+
+      document.getElementById('correctCount').textContent = score;
+      document.getElementById('accuracy').textContent = percentage + "%";
+      document.getElementById('timeTaken').textContent = `${min}:${sec.toString().padStart(2, '0')}`;
+
+      let reviewHTML = questions.map((q, i) => {
+        const isCorrect = selectedAnswers[i] === q.answer;
+        return `
+          <div class="question" style="border-left: 6px solid ${isCorrect ? '#22c55e' : '#ef4444'};">
+            <p><strong>Q${i+1}: ${currentLanguage === 'en' ? q.q : q.qt}</strong></p>
+            <p>Your Answer: <strong>${selectedAnswers[i] !== null ?
+              String.fromCharCode(65 + selectedAnswers[i]) + ") " +
+              (currentLanguage === 'en' ? q.options[selectedAnswers[i]] : q.optionst[selectedAnswers[i]])
+              : "Not Answered"}</strong></p>
+            <p style="color:${isCorrect ? 'green' : 'red'}">Correct: ${String.fromCharCode(65 + q.answer) + ") " +
+              (currentLanguage === 'en' ? q.options[q.answer] : q.optionst[q.answer])}</p>
+          </div>`;
+      }).join('');
+      document.getElementById('reviewSection').innerHTML = reviewHTML;
+    }
+
+    function restartQuiz() {
+      if (!confirm("Do you want to restart the exam?")) return;
+      clearProgress();
+      location.reload();
+    }
+
+    // Keyboard Navigation
+    document.addEventListener('keydown', (e) => {
+      if (document.getElementById('resultSection').style.display === 'block') return;
+      if (e.key === 'ArrowRight') nextQuestion();
+      if (e.key === 'ArrowLeft') prevQuestion();
+      if (e.key === 'Enter' && currentQuestionIndex === 19) submitQuiz();
+    });
+
+    function initPaletteScroll() {
+      const wrapper = document.getElementById('paletteWrapper');
+      wrapper.addEventListener('scroll', updateArrowVisibility);
+    }
+
+    // Initialize
+    window.onload = async () => {
+      initPaletteScroll();
+      await initIndexedDB();
+      const hasSaved = await loadProgress();
+      if (hasSaved && candidateName) {
+        document.getElementById('startScreen').style.display = 'none';
+        document.getElementById('quizSection').style.display = 'block';
+        document.getElementById('topCandidateName').textContent = "Candidate: " + candidateName;
+        renderCurrentQuestion();
+        startTimer();
+      }
+    };
+
+    window.addEventListener('beforeunload', () => {
+      if (document.getElementById('quizSection').style.display !== 'none') saveProgress();
+    });
+  </script>
+</body>
+</html>

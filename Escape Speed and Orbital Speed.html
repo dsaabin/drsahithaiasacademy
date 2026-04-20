@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#1e3a8a">
+  <title>DR SAHITHA IAS ACADEMY - UG-TRB Physics Test-26</title>
+  <style>
+    :root {
+      --bg: linear-gradient(135deg, #f0f4f8, #d9e4f0);
+      --card: #fff;
+      --text: #333;
+      --border: #ddd;
+    }
+    [data-theme="dark"] {
+      --bg: linear-gradient(135deg, #1a2338, #0f172a);
+      --card: #1e2937;
+      --text: #e2e8f0;
+      --border: #475569;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      margin: 0;
+      padding: 20px;
+      color: var(--text);
+    }
+    .container {
+      max-width: 950px;
+      margin: 0 auto;
+      background: var(--card);
+      border-radius: 20px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.18);
+      overflow: hidden;
+    }
+    .dashboard {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 40px 30px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .score-circle {
+      width: 170px; height: 170px; border-radius: 50%;
+      background: conic-gradient(#22c55e 0% var(--progress), #e2e8f0 var(--progress) 100%);
+      display: flex; align-items: center; justify-content: center;
+      margin: 20px auto; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    .score-inner {
+      width: 130px; height: 130px; background: white; border-radius: 50%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      color: #1e3a8a;
+    }
+    .score-value { font-size: 48px; font-weight: bold; }
+    .score-label { font-size: 14px; opacity: 0.8; }
+    .performance-badge {
+      padding: 12px 30px; border-radius: 50px; font-weight: bold; font-size: 18px;
+      display: inline-block; margin: 15px 0; box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    }
+    .badge-excellent { background: #22c55e; color: white; }
+    .badge-good { background: #eab308; color: #1e3a8a; }
+    .badge-improve { background: #ef4444; color: white; }
+
+    .theme-toggle {
+      position: absolute; top: 25px; right: 25px; padding: 10px 20px; border-radius: 25px;
+      cursor: pointer; font-weight: bold; background: #1e3a8a; color: white; border: none;
+    }
+    .candidate-name {
+      position: absolute; top: 25px; left: 25px; font-weight: bold;
+      color: #1e3a8a; background: rgba(255,255,255,0.9); padding: 8px 16px;
+      border-radius: 25px; border: 2px solid #1e3a8a;
+    }
+    .timer {
+      font-size: 24px; font-weight: bold; color: #ff4444; background: rgba(255,255,255,0.2);
+      padding: 12px 30px; border-radius: 50px; display: inline-block; margin: 15px 0;
+    }
+    .question {
+      margin-bottom: 28px; padding: 25px; border: 1px solid var(--border);
+      border-radius: 12px; background: var(--card);
+    }
+    .option {
+      padding: 14px 16px; margin: 10px 0; border: 1px solid var(--border);
+      border-radius: 8px; cursor: pointer; transition: all 0.3s;
+    }
+    .option:hover { background: #e3f2fd; border-color: #1e88e5; }
+    .option.selected { background: #1e88e5; color: white; border-color: #1e88e5; }
+    button {
+      background: #1e3a8a; color: white; border: none; padding: 12px 24px;
+      font-size: 16px; border-radius: 8px; cursor: pointer; margin: 8px 5px;
+    }
+    button:hover { background: #15306e; }
+    button.submit-btn { background: #d32f2f; padding: 14px 32px; font-size: 18px; }
+    .nav-buttons {
+      display: flex; justify-content: space-between; margin-top: 25px;
+      flex-wrap: wrap; gap: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Start Screen -->
+    <div class="start-screen" id="startScreen">
+      <h2>Welcome to</h2>
+      <div class="institute" style="color:#1e3a8a; font-size:28px; font-weight:bold;">DR SAHITHA IAS ACADEMY</div>
+      <h1>UG-TRB Physics Test No: 26</h1>
+      <p><strong>Topic:</strong> Escape Speed and Orbital Speed</p>
+      <p><strong>Date:</strong> 20/04/2026 | <strong>Duration:</strong> 15 Minutes | <strong>Marks:</strong> 10</p>
+      <h3 style="margin-top:30px;">Enter Name of Candidate</h3>
+      <input type="text" id="candidateName" placeholder="Full Name of the Candidate" autocomplete="off"
+             style="padding:12px; width:80%; max-width:400px; border-radius:8px; border:2px solid #1e3a8a; font-size:16px;">
+      <br><br>
+      <button onclick="startExam()" style="padding:14px 40px; font-size:18px;">Start Exam</button>
+    </div>
+
+    <!-- Quiz Section -->
+    <div class="quiz-container" id="quizSection" style="display:none; padding:40px;">
+      <div class="candidate-name" id="topCandidateName"></div>
+      <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()">🌙 Dark</button>
+    
+      <div class="timer" id="timer">Time Left: 15:00</div>
+      <div style="margin:15px 0; font-weight:bold;">Question <span id="currentQ">1</span> of 10</div>
+
+      <div id="quiz"></div>
+      <div class="nav-buttons" id="navButtons"></div>
+    </div>
+
+    <!-- Result Section -->
+    <div class="result" id="resultSection" style="display:none;">
+      <div class="dashboard">
+        <h2 style="margin:0 0 8px 0;">🎉 Quiz Completed!</h2>
+        <div class="test-info">UG-TRB Physics Test No: 26</div>
+        <div class="test-info">Date: 20/04/2026</div>
+        <p id="finalCandidateName" style="font-size:18px; margin:15px 0;"></p>
+
+        <div class="score-circle" id="scoreCircle">
+          <div class="score-inner">
+            <div class="score-value" id="scoreValue">0</div>
+            <div class="score-label">out of 10</div>
+          </div>
+        </div>
+        <div class="performance-badge" id="performanceBadge">Performance</div>
+      </div>
+      <div style="padding:30px;">
+        <button onclick="restartQuiz()" style="width:100%; padding:16px; font-size:18px; background:#1e3a8a; margin-bottom:30px;">
+          Restart Quiz
+        </button>
+        <h3 style="color:#1e3a8a;">📝 Review Your Answers</h3>
+        <div id="reviewSection"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      { q: "A satellite is in a circular orbit around the Earth at an altitude of 200km. What is its orbital speed?", 
+        options: ["8.1 km/s", "7.8 km/s", "14.6 km/s", "10.8 km/s"], 
+        answer: 1 },
+
+      { q: "The escape velocity from the surface of the moon is", 
+        options: ["greater than that of Earth", "less than that of Earth", "Equal to that of Earth", "Cannot be determined"], 
+        answer: 1 },
+
+      { q: "The escape speed is ____ of mass of the object.", 
+        options: ["dependent", "independent", "change", "linear"], 
+        answer: 1 },
+
+      { q: "What happens to the orbital speed of the satellite as its altitude increases?", 
+        options: ["increases", "decrease", "remains same", "zero"], 
+        answer: 1 },
+
+      { q: "The orbit period of the satellite in a circular orbit depends on", 
+        options: ["mass of satellite", "Radius of orbit", "mass of planet", "both (b) and (c)"], 
+        answer: 3 },
+
+      { q: "The escape velocity from a planet surface is 10 km/s. What is the escape velocity from a planet with half the mass and same radius?", 
+        options: ["5 km/s", "7.07 km/s", "10 km/s", "14.14 km/s"], 
+        answer: 1 },
+
+      { q: "Expression for escape velocity:", 
+        options: ["Vₑ = √(gRₑ)", "Vₑ = √2 V₀", "Vₑ = √(2gRₑ)", "both (b) and (c)"], 
+        answer: 3 },
+
+      { q: "Statement 1: Escape velocity is independent of the mass of the projecting body. Statement 2: It is same for both cat and elephant. Identify correct statement:", 
+        options: ["both 1 and 2", "only 2", "only 1", "both 1 and 2 wrong"], 
+        answer: 0 },
+
+      { q: "Statement 1: The velocity required to put the satellite in its orbit around the Earth. Statement 2: The relation between escape velocity and orbital velocity is V₀ = 7.07 Vₑ Statement 3: Escape velocity is used to find the nature of atmosphere in a particular planet.", 
+        options: ["only 1", "both 1 and 2", "both 2 and 3", "All"], 
+        answer: 3 },
+
+      { q: "Match the following:\n1. Escape velocity from Earth — a) 7.9 km/s\n2. Escape velocity from Sun — b) 2.4 km/s\n3. Escape velocity from Moon — c) 618 km/s\n4. Orbital velocity from Earth — d) 11.2 km/s", 
+        options: ["b, c, d, a", "d, c, b, a", "a, b, c, d", "c, d, b, a"], 
+        answer: 1 }
+    ];
+
+    let currentLanguage = 'en';
+    let selectedAnswers = new Array(10).fill(null);
+    let currentQuestionIndex = 0;
+    let timerInterval;
+    let timeLeft = 15 * 60;
+    let candidateName = "";
+    let isDarkMode = false;
+    let quizStartTime = Date.now();
+
+    function toggleTheme() {
+      isDarkMode = !isDarkMode;
+      document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+      document.getElementById('themeBtn').textContent = isDarkMode ? '☀️ Light' : '🌙 Dark';
+    }
+
+    function startExam() {
+      candidateName = document.getElementById('candidateName').value.trim();
+      if (!candidateName) return alert("Please enter the Name of the Candidate.");
+      
+      document.getElementById('startScreen').style.display = 'none';
+      document.getElementById('quizSection').style.display = 'block';
+      document.getElementById('topCandidateName').textContent = "Candidate: " + candidateName;
+      quizStartTime = Date.now();
+      renderCurrentQuestion();
+      startTimer();
+    }
+
+    function renderCurrentQuestion() {
+      const q = questions[currentQuestionIndex];
+      let html = `<div class="question">`;
+      html += `<div style="font-weight:bold; color:#1e3a8a; margin-bottom:12px;">Question ${currentQuestionIndex + 1} of 10</div>`;
+      html += `<p><strong>${q.q}</strong></p>`;
+
+      q.options.forEach((opt, j) => {
+        const selected = selectedAnswers[currentQuestionIndex] === j ? 'selected' : '';
+        html += `<div class="option ${selected}" onclick="selectAnswer(${j})">
+          ${String.fromCharCode(65 + j)}) ${opt}
+        </div>`;
+      });
+
+      html += `</div>`;
+
+      document.getElementById('quiz').innerHTML = html;
+      document.getElementById('currentQ').textContent = currentQuestionIndex + 1;
+      updateNavigationButtons();
+    }
+
+    function selectAnswer(optionIndex) {
+      selectedAnswers[currentQuestionIndex] = optionIndex;
+      renderCurrentQuestion();
+    }
+
+    function nextQuestion() {
+      if (currentQuestionIndex < 9) {
+        currentQuestionIndex++;
+        renderCurrentQuestion();
+      }
+    }
+
+    function prevQuestion() {
+      if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        renderCurrentQuestion();
+      }
+    }
+
+    function updateNavigationButtons() {
+      const nav = document.getElementById('navButtons');
+      let html = `<button onclick="prevQuestion()">← Previous</button>`;
+      if (currentQuestionIndex < 9) {
+        html += `<button onclick="nextQuestion()">Next →</button>`;
+      } else {
+        html += `<button onclick="submitQuiz()" class="submit-btn">Submit Final</button>`;
+      }
+      nav.innerHTML = html;
+    }
+
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        const min = Math.floor(timeLeft / 60);
+        const sec = timeLeft % 60;
+        document.getElementById('timer').textContent = `Time Left: ${min}:${sec < 10 ? '0' : ''}${sec}`;
+        if (timeLeft <= 0) submitQuiz();
+      }, 1000);
+    }
+
+    function submitQuiz() {
+      if (timerInterval) clearInterval(timerInterval);
+      let score = 0;
+      questions.forEach((q, i) => { if (selectedAnswers[i] === q.answer) score++; });
+
+      const percentage = ((score / 10) * 100).toFixed(1);
+      document.getElementById('quizSection').style.display = 'none';
+      document.getElementById('resultSection').style.display = 'block';
+      document.getElementById('scoreCircle').style.setProperty('--progress', `${percentage}%`);
+      document.getElementById('scoreValue').textContent = score;
+      document.getElementById('finalCandidateName').textContent = candidateName;
+
+      const badge = document.getElementById('performanceBadge');
+      if (score >= 8) {
+        badge.textContent = "🌟 Excellent Performance!";
+        badge.className = "performance-badge badge-excellent";
+      } else if (score >= 5) {
+        badge.textContent = "👍 Good Job!";
+        badge.className = "performance-badge badge-good";
+      } else {
+        badge.textContent = "📚 Needs Improvement";
+        badge.className = "performance-badge badge-improve";
+      }
+
+      // Review
+      let reviewHTML = questions.map((q, i) => {
+        const isCorrect = selectedAnswers[i] === q.answer;
+        return `
+          <div class="question" style="border-left: 6px solid ${isCorrect ? '#22c55e' : '#ef4444'};">
+            <p><strong>Q${i+1}: ${q.q}</strong></p>
+            <p>Your Answer: <strong>${selectedAnswers[i] !== null ? String.fromCharCode(65 + selectedAnswers[i]) : "Not Answered"}</strong></p>
+            <p style="color:${isCorrect ? 'green' : 'red'}">Correct Answer: ${String.fromCharCode(65 + q.answer)}</p>
+          </div>`;
+      }).join('');
+      document.getElementById('reviewSection').innerHTML = reviewHTML;
+    }
+
+    function restartQuiz() {
+      if (confirm("Do you want to restart the exam?")) location.reload();
+    }
+
+    window.onload = () => {};
+  </script>
+</body>
+</html>

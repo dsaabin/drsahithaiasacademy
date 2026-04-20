@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#1e3a8a">
+  <title>DR SAHITHA IAS ACADEMY - Mathematics Test-25</title>
+  <style>
+    :root {
+      --bg: linear-gradient(135deg, #f0f4f8, #d9e4f0);
+      --card: #fff;
+      --text: #333;
+      --border: #ddd;
+    }
+    [data-theme="dark"] {
+      --bg: linear-gradient(135deg, #1a2338, #0f172a);
+      --card: #1e2937;
+      --text: #e2e8f0;
+      --border: #475569;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      margin: 0;
+      padding: 20px;
+      color: var(--text);
+    }
+    .container {
+      max-width: 950px;
+      margin: 0 auto;
+      background: var(--card);
+      border-radius: 20px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.18);
+      overflow: hidden;
+    }
+    .dashboard {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 40px 30px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .score-circle {
+      width: 170px; height: 170px; border-radius: 50%;
+      background: conic-gradient(#22c55e 0% var(--progress), #e2e8f0 var(--progress) 100%);
+      display: flex; align-items: center; justify-content: center;
+      margin: 20px auto; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    .score-inner {
+      width: 130px; height: 130px; background: white; border-radius: 50%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      color: #1e3a8a;
+    }
+    .score-value { font-size: 48px; font-weight: bold; }
+    .score-label { font-size: 14px; opacity: 0.8; }
+    .performance-badge {
+      padding: 12px 30px; border-radius: 50px; font-weight: bold; font-size: 18px;
+      display: inline-block; margin: 15px 0; box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    }
+    .badge-excellent { background: #22c55e; color: white; }
+    .badge-good { background: #eab308; color: #1e3a8a; }
+    .badge-improve { background: #ef4444; color: white; }
+
+    .lang-toggle, .theme-toggle {
+      position: absolute; top: 25px; padding: 10px 20px; border-radius: 25px;
+      cursor: pointer; font-weight: bold; z-index: 100;
+    }
+    .lang-toggle { right: 140px; background: white; color: #1e3a8a; border: 2px solid #1e3a8a; }
+    .theme-toggle { right: 25px; background: #1e3a8a; color: white; border: none; }
+    .candidate-name {
+      position: absolute; top: 25px; left: 25px; font-weight: bold;
+      color: #1e3a8a; background: rgba(255,255,255,0.9); padding: 8px 16px;
+      border-radius: 25px; border: 2px solid #1e3a8a;
+    }
+    .timer {
+      font-size: 24px; font-weight: bold; color: #ff4444; background: rgba(255,255,255,0.2);
+      padding: 12px 30px; border-radius: 50px; display: inline-block; margin: 15px 0;
+    }
+    .question {
+      margin-bottom: 28px; padding: 25px; border: 1px solid var(--border);
+      border-radius: 12px; background: var(--card);
+    }
+    .option {
+      padding: 14px 16px; margin: 8px 0; border: 1px solid var(--border);
+      border-radius: 8px; cursor: pointer; transition: all 0.3s;
+    }
+    .option:hover { background: #e3f2fd; border-color: #1e88e5; }
+    .option.selected { background: #1e88e5; color: white; border-color: #1e88e5; }
+    button {
+      background: #1e3a8a; color: white; border: none; padding: 12px 24px;
+      font-size: 16px; border-radius: 8px; cursor: pointer; margin: 8px 5px;
+    }
+    button:hover { background: #15306e; }
+    button.submit-btn { background: #d32f2f; padding: 14px 32px; font-size: 18px; }
+    .nav-buttons {
+      display: flex; justify-content: space-between; margin-top: 25px;
+      flex-wrap: wrap; gap: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Start Screen -->
+    <div class="start-screen" id="startScreen">
+      <h2>Welcome to</h2>
+      <div class="institute" style="color:#1e3a8a; font-size:28px; font-weight:bold;">DR SAHITHA IAS ACADEMY</div>
+      <h1>Mathematics Test No: 25</h1>
+      <p><strong>Topic:</strong> 8th Number System</p>
+      <p><strong>Date:</strong> 20/04/2026 | <strong>Duration:</strong> 10 Minutes | <strong>Marks:</strong> 10</p>
+      <h3 style="margin-top:30px;">Enter Name of Candidate</h3>
+      <input type="text" id="candidateName" placeholder="Full Name of the Candidate" autocomplete="off"
+             style="padding:12px; width:80%; max-width:400px; border-radius:8px; border:2px solid #1e3a8a; font-size:16px;">
+      <br><br>
+      <button onclick="startExam()" style="padding:14px 40px; font-size:18px;">Start Exam</button>
+    </div>
+
+    <!-- Quiz Section -->
+    <div class="quiz-container" id="quizSection" style="display:none; padding:40px;">
+      <div class="candidate-name" id="topCandidateName"></div>
+      <button class="lang-toggle" id="langBtn" onclick="toggleLanguage()">தமிழ்</button>
+      <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()">🌙 Dark</button>
+    
+      <div class="timer" id="timer">Time Left: 10:00</div>
+      <div style="margin:15px 0; font-weight:bold;">Question <span id="currentQ">1</span> of 10</div>
+
+      <div id="quiz"></div>
+      <div class="nav-buttons" id="navButtons"></div>
+    </div>
+
+    <!-- Result Section -->
+    <div class="result" id="resultSection" style="display:none;">
+      <div class="dashboard">
+        <h2 style="margin:0 0 8px 0;">🎉 Quiz Completed!</h2>
+        <div class="test-info">Mathematics Test No: 25</div>
+        <div class="test-info">Date: 20/04/2026</div>
+        <p id="finalCandidateName" style="font-size:18px; margin:15px 0;"></p>
+
+        <div class="score-circle" id="scoreCircle">
+          <div class="score-inner">
+            <div class="score-value" id="scoreValue">0</div>
+            <div class="score-label">out of 10</div>
+          </div>
+        </div>
+        <div class="performance-badge" id="performanceBadge">Performance</div>
+      </div>
+      <div style="padding:30px;">
+        <button onclick="restartQuiz()" style="width:100%; padding:16px; font-size:18px; background:#1e3a8a; margin-bottom:30px;">
+          Restart Quiz
+        </button>
+        <h3 style="color:#1e3a8a;">📝 Review Your Answers</h3>
+        <div id="reviewSection"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      { q: "If 3/4 of a box of apples weighs 3 kg 225 gm, what is the weight of a full box?", 
+        qt: "ஒரு ஆப்பிள் பெட்டியின் 3/4 பங்கு 3 கிகி 225 கிராம் எடையுள்ளது எனில், முழுப் பெட்டியின் எடை என்ன?", 
+        options: ["4 kg 200 gm", "4 kg 250 gm", "4 kg 300 gm", "4 kg 350 gm"], 
+        optionst: ["4 கிகி 200 கிராம்", "4 கிகி 250 கிராம்", "4 கிகி 300 கிராம்", "4 கிகி 350 கிராம்"], 
+        answer: 2 },
+
+      { q: "Mangalam buys a water jug of capacity 2 1/4 litres. If she buys another jug which is 1 1/3 times larger, how many litres can the larger jug hold?", 
+        qt: "மங்களம் 2 1/4 லிட்டர் கொள்ளளவு கொண்ட ஒரு தண்ணீர் ஜக் வாங்குகிறார். அவர் 1 1/3 மடங்கு பெரிய மற்றொரு ஜக் வாங்கினால், பெரிய ஜக்கின் கொள்ளளவு எத்தனை லிட்டர்?", 
+        options: ["3 litres", "3 1/2 litres", "4 litres", "4 1/2 litres"], 
+        optionst: ["3 லிட்டர்கள்", "3 1/2 லிட்டர்கள்", "4 லிட்டர்கள்", "4 1/2 லிட்டர்கள்"], 
+        answer: 0 },
+
+      { q: "Ravi multiplied 3/5 and 5/7 and got 15/35. Chandru says the answer in simplest form is 3/7. Who is correct?", 
+        qt: "ரவி 3/5 மற்றும் 5/7 ஐப் பெருக்கி 15/35 பெற்றார். சந்திரு, மிக எளிய வடிவில் விடை 3/7 என்கிறார். யார் சரியானவர்?", 
+        options: ["Only Ravi", "Only Chandru", "Both are correct", "Neither is correct"], 
+        optionst: ["ரவி மட்டும்", "சந்திரு மட்டும்", "இருவருமே சரி", "இருவருமே தவறு"], 
+        answer: 2 },
+
+      { q: "The area of a room is 18 sq.m and its breadth is 3 m. What is the length of the room?", 
+        qt: "ஒரு அறையின் பரப்பு 18 ச.மீ மற்றும் அதன் அகலம் 3 மீ எனில், அறையின் நீளம் என்ன?", 
+        options: ["4 m", "5 m", "6 m", "7 m"], 
+        optionst: ["4 மீ", "5 மீ", "6 மீ", "7 மீ"], 
+        answer: 2 },
+
+      { q: "A square portrait covers an area of 4489 cm². If each side has a 2 cm liner, what is the area of the larger square (including the liner)?", 
+        qt: "ஒரு சதுர உருவப்படம் 4489 ச.செ.மீ பரப்பைக் கொண்டுள்ளது. ஒவ்வொரு பக்கமும் 2 செ.மீ லைனர் (ஓரம்) இருந்தால், பெரிய சதுரத்தின் பரப்பு (லைனர் உட்பட) என்ன?", 
+        options: ["4489 cm²", "4761 cm²", "5041 cm²", "5329 cm²"], 
+        optionst: ["4489 ச.செ.மீ", "4761 ச.செ.மீ", "5041 ச.செ.மீ", "5329 ச.செ.மீ"], 
+        answer: 2 },
+
+      { q: "What is the area of the liner alone in the above problem?", 
+        qt: "மேலுள்ள கணக்கில் லைனர் மட்டுமே எவ்வளவு பரப்பைக் கொண்டுள்ளது?", 
+        options: ["512 cm²", "532 cm²", "542 cm²", "552 cm²"], 
+        optionst: ["512 ச.செ.மீ", "532 ச.செ.மீ", "542 ச.செ.மீ", "552 ச.செ.மீ"], 
+        answer: 3 },
+
+      { q: "A greeting card has an area of 90 cm². Between which two whole numbers does the length of its side lie?", 
+        qt: "ஒரு வாழ்த்து அட்டையின் பரப்பு 90 ச.செ.மீ. அதன் பக்கத்தின் நீளம் எந்த இரு முழு எண்களுக்கு இடையில் இருக்கும்?", 
+        options: ["8 and 9", "9 and 10", "10 and 11", "11 and 12"], 
+        optionst: ["8 மற்றும் 9", "9 மற்றும் 10", "10 மற்றும் 11", "11 மற்றும் 12"], 
+        answer: 1 },
+
+      { q: "225 square-shaped mosaic tiles, each of area 1 square decimetre, exactly cover a square-shaped verandah. How long is each side of the verandah?", 
+        qt: "ஒவ்வொன்றும் 1 ச.டெசிமீ பரப்புள்ள 225 சதுர வடிவ மொசைக் ஓடுகள், ஒரு சதுர வடிவத் தாழ்வாரத்தை முழுமையாக மூடுகின்றன. தாழ்வாரத்தின் ஒவ்வொரு பக்கத்தின் நீளம் என்ன?", 
+        options: ["12 dm", "13 dm", "14 dm", "15 dm"], 
+        optionst: ["12 டெசிமீ", "13 டெசிமீ", "14 டெசிமீ", "15 டெசிமீ"], 
+        answer: 3 },
+
+      { q: "If √x = 25, then find x².", 
+        qt: "√x = 25 எனில், x² ஐக் காண்க.", 
+        options: ["400", "625", "900", "1225"], 
+        optionst: ["400", "625", "900", "1225"], 
+        answer: 1 },
+
+      { q: "If √x + √y = 8 and √x - √y = 2, then find x + y.", 
+        qt: "√x + √y = 8 மற்றும் √x - √y = 2 எனில், x + y ஐக் காண்க.", 
+        options: ["6", "7", "8", "9"], 
+        optionst: ["6", "7", "8", "9"], 
+        answer: 2 }
+    ];
+
+    let currentLanguage = 'en';
+    let selectedAnswers = new Array(10).fill(null);
+    let currentQuestionIndex = 0;
+    let timerInterval;
+    let timeLeft = 10 * 60;
+    let candidateName = "";
+    let isDarkMode = false;
+    let quizStartTime = Date.now();
+
+    function toggleTheme() {
+      isDarkMode = !isDarkMode;
+      document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+      document.getElementById('themeBtn').textContent = isDarkMode ? '☀️ Light' : '🌙 Dark';
+    }
+
+    function startExam() {
+      candidateName = document.getElementById('candidateName').value.trim();
+      if (!candidateName) return alert("Please enter the Name of the Candidate.");
+      
+      document.getElementById('startScreen').style.display = 'none';
+      document.getElementById('quizSection').style.display = 'block';
+      document.getElementById('topCandidateName').textContent = "Candidate: " + candidateName;
+      quizStartTime = Date.now();
+      renderCurrentQuestion();
+      startTimer();
+    }
+
+    function toggleLanguage() {
+      currentLanguage = currentLanguage === 'en' ? 'ta' : 'en';
+      document.getElementById('langBtn').textContent = currentLanguage === 'en' ? 'தமிழ்' : 'English';
+      renderCurrentQuestion();
+    }
+
+    function renderCurrentQuestion() {
+      const q = questions[currentQuestionIndex];
+      const text = currentLanguage === 'en' ? q.q : q.qt;
+
+      let html = `<div class="question">`;
+      html += `<div style="font-weight:bold; color:#1e3a8a; margin-bottom:12px;">Question ${currentQuestionIndex + 1} of 10</div>`;
+      html += `<p><strong>${text}</strong></p>`;
+
+      q.options.forEach((opt, j) => {
+        const selected = selectedAnswers[currentQuestionIndex] === j ? 'selected' : '';
+        html += `<div class="option ${selected}" onclick="selectAnswer(${j})">
+          ${String.fromCharCode(65 + j)}) ${currentLanguage === 'en' ? opt : q.optionst[j]}
+        </div>`;
+      });
+
+      html += `</div>`;
+
+      document.getElementById('quiz').innerHTML = html;
+      document.getElementById('currentQ').textContent = currentQuestionIndex + 1;
+      updateNavigationButtons();
+    }
+
+    function selectAnswer(optionIndex) {
+      selectedAnswers[currentQuestionIndex] = optionIndex;
+      renderCurrentQuestion();
+    }
+
+    function nextQuestion() {
+      if (currentQuestionIndex < 9) {
+        currentQuestionIndex++;
+        renderCurrentQuestion();
+      }
+    }
+
+    function prevQuestion() {
+      if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        renderCurrentQuestion();
+      }
+    }
+
+    function updateNavigationButtons() {
+      const nav = document.getElementById('navButtons');
+      let html = `<button onclick="prevQuestion()">← Previous</button>`;
+      if (currentQuestionIndex < 9) {
+        html += `<button onclick="nextQuestion()">Next →</button>`;
+      } else {
+        html += `<button onclick="submitQuiz()" class="submit-btn">Submit Final</button>`;
+      }
+      nav.innerHTML = html;
+    }
+
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        const min = Math.floor(timeLeft / 60);
+        const sec = timeLeft % 60;
+        document.getElementById('timer').textContent = `Time Left: ${min}:${sec < 10 ? '0' : ''}${sec}`;
+        if (timeLeft <= 0) submitQuiz();
+      }, 1000);
+    }
+
+    function submitQuiz() {
+      if (timerInterval) clearInterval(timerInterval);
+      let score = 0;
+      questions.forEach((q, i) => { if (selectedAnswers[i] === q.answer) score++; });
+
+      const percentage = ((score / 10) * 100).toFixed(1);
+      document.getElementById('quizSection').style.display = 'none';
+      document.getElementById('resultSection').style.display = 'block';
+      document.getElementById('scoreCircle').style.setProperty('--progress', `${percentage}%`);
+      document.getElementById('scoreValue').textContent = score;
+      document.getElementById('finalCandidateName').textContent = candidateName;
+
+      const badge = document.getElementById('performanceBadge');
+      if (score >= 8) {
+        badge.textContent = "🌟 Excellent Performance!";
+        badge.className = "performance-badge badge-excellent";
+      } else if (score >= 5) {
+        badge.textContent = "👍 Good Job!";
+        badge.className = "performance-badge badge-good";
+      } else {
+        badge.textContent = "📚 Needs Improvement";
+        badge.className = "performance-badge badge-improve";
+      }
+
+      // Review
+      let reviewHTML = questions.map((q, i) => {
+        const isCorrect = selectedAnswers[i] === q.answer;
+        return `
+          <div class="question" style="border-left: 6px solid ${isCorrect ? '#22c55e' : '#ef4444'};">
+            <p><strong>Q${i+1}: ${currentLanguage === 'en' ? q.q : q.qt}</strong></p>
+            <p>Your Answer: <strong>${selectedAnswers[i] !== null ? String.fromCharCode(65 + selectedAnswers[i]) : "Not Answered"}</strong></p>
+            <p style="color:${isCorrect ? 'green' : 'red'}">Correct: ${String.fromCharCode(65 + q.answer)}</p>
+          </div>`;
+      }).join('');
+      document.getElementById('reviewSection').innerHTML = reviewHTML;
+    }
+
+    function restartQuiz() {
+      if (confirm("Do you want to restart the exam?")) location.reload();
+    }
+
+    window.onload = () => {};
+  </script>
+</body>
+</html>

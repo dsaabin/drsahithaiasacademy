@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#1e3a8a">
+  <title>DR SAHITHA IAS ACADEMY - TRB English DT-20</title>
+  <style>
+    :root {
+      --bg: linear-gradient(135deg, #f0f4f8, #d9e4f0);
+      --card: #fff;
+      --text: #333;
+      --border: #ddd;
+    }
+    [data-theme="dark"] {
+      --bg: linear-gradient(135deg, #1a2338, #0f172a);
+      --card: #1e2937;
+      --text: #e2e8f0;
+      --border: #475569;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      margin: 0;
+      padding: 20px;
+      color: var(--text);
+    }
+    .container {
+      max-width: 950px;
+      margin: 0 auto;
+      background: var(--card);
+      border-radius: 20px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.18);
+      overflow: hidden;
+    }
+    .dashboard {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 40px 30px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .score-circle {
+      width: 170px; height: 170px; border-radius: 50%;
+      background: conic-gradient(#22c55e 0% var(--progress), #e2e8f0 var(--progress) 100%);
+      display: flex; align-items: center; justify-content: center;
+      margin: 20px auto; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    .score-inner {
+      width: 130px; height: 130px; background: white; border-radius: 50%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      color: #1e3a8a;
+    }
+    .score-value { font-size: 48px; font-weight: bold; }
+    .score-label { font-size: 14px; opacity: 0.8; }
+    .performance-badge {
+      padding: 12px 30px; border-radius: 50px; font-weight: bold; font-size: 18px;
+      display: inline-block; margin: 15px 0; box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    }
+    .badge-excellent { background: #22c55e; color: white; }
+    .badge-good { background: #eab308; color: #1e3a8a; }
+    .badge-improve { background: #ef4444; color: white; }
+
+    .lang-toggle, .theme-toggle {
+      position: absolute; top: 25px; padding: 10px 20px; border-radius: 25px;
+      cursor: pointer; font-weight: bold; z-index: 100;
+    }
+    .theme-toggle { right: 25px; background: #1e3a8a; color: white; border: none; }
+    .candidate-name {
+      position: absolute; top: 25px; left: 25px; font-weight: bold;
+      color: #1e3a8a; background: rgba(255,255,255,0.9); padding: 8px 16px;
+      border-radius: 25px; border: 2px solid #1e3a8a;
+    }
+    .timer {
+      font-size: 24px; font-weight: bold; color: #ff4444; background: rgba(255,255,255,0.2);
+      padding: 12px 30px; border-radius: 50px; display: inline-block; margin: 15px 0;
+    }
+    .question {
+      margin-bottom: 28px; padding: 25px; border: 1px solid var(--border);
+      border-radius: 12px; background: var(--card);
+    }
+    .option {
+      padding: 14px 16px; margin: 10px 0; border: 1px solid var(--border);
+      border-radius: 8px; cursor: pointer; transition: all 0.3s;
+    }
+    .option:hover { background: #e3f2fd; border-color: #1e88e5; }
+    .option.selected { background: #1e88e5; color: white; border-color: #1e88e5; }
+    button {
+      background: #1e3a8a; color: white; border: none; padding: 12px 24px;
+      font-size: 16px; border-radius: 8px; cursor: pointer; margin: 8px 5px;
+    }
+    button:hover { background: #15306e; }
+    button.submit-btn { background: #d32f2f; padding: 14px 32px; font-size: 18px; }
+    .nav-buttons {
+      display: flex; justify-content: space-between; margin-top: 25px;
+      flex-wrap: wrap; gap: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Start Screen -->
+    <div class="start-screen" id="startScreen">
+      <h2>Welcome to</h2>
+      <div class="institute" style="color:#1e3a8a; font-size:28px; font-weight:bold;">DR SAHITHA IAS ACADEMY</div>
+      <h1>TRB English - DT: 20</h1>
+      <p><strong>Topic:</strong> History of English Theatre & Shakespearean Stage</p>
+      <p><strong>Date:</strong> 20/04/2025 | <strong>Duration:</strong> 15 Minutes | <strong>Marks:</strong> 25</p>
+      <h3 style="margin-top:30px;">Enter Name of Candidate</h3>
+      <input type="text" id="candidateName" placeholder="Full Name of the Candidate" autocomplete="off"
+             style="padding:12px; width:80%; max-width:400px; border-radius:8px; border:2px solid #1e3a8a; font-size:16px;">
+      <br><br>
+      <button onclick="startExam()" style="padding:14px 40px; font-size:18px;">Start Exam</button>
+    </div>
+
+    <!-- Quiz Section -->
+    <div class="quiz-container" id="quizSection" style="display:none; padding:40px;">
+      <div class="candidate-name" id="topCandidateName"></div>
+      <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()">🌙 Dark</button>
+    
+      <div class="timer" id="timer">Time Left: 15:00</div>
+      <div style="margin:15px 0; font-weight:bold;">Question <span id="currentQ">1</span> of 25</div>
+
+      <div id="quiz"></div>
+      <div class="nav-buttons" id="navButtons"></div>
+    </div>
+
+    <!-- Result Section -->
+    <div class="result" id="resultSection" style="display:none;">
+      <div class="dashboard">
+        <h2 style="margin:0 0 8px 0;">🎉 Quiz Completed!</h2>
+        <div class="test-info">TRB English - DT: 20</div>
+        <div class="test-info">Date: 20/04/2025</div>
+        <p id="finalCandidateName" style="font-size:18px; margin:15px 0;"></p>
+
+        <div class="score-circle" id="scoreCircle">
+          <div class="score-inner">
+            <div class="score-value" id="scoreValue">0</div>
+            <div class="score-label">out of 25</div>
+          </div>
+        </div>
+        <div class="performance-badge" id="performanceBadge">Performance</div>
+      </div>
+      <div style="padding:30px;">
+        <button onclick="restartQuiz()" style="width:100%; padding:16px; font-size:18px; background:#1e3a8a; margin-bottom:30px;">
+          Restart Quiz
+        </button>
+        <h3 style="color:#1e3a8a;">📝 Review Your Answers</h3>
+        <div id="reviewSection"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      { q: "Before 1576, plays in England were mainly performed in:", 
+        options: ["Purpose-built theatres", "Inn yards and marketplaces", "Universities only", "Churches exclusively"], 
+        answer: 1 },
+
+      { q: "The first permanent public theatre in England (1576) was built by:", 
+        options: ["William Shakespeare", "Richard Burbage", "James Burbage", "Philip Henslowe"], 
+        answer: 2 },
+
+      { q: "The first permanent theatre (1576) was called:", 
+        options: ["The Globe", "The Curtain", "The Theatre", "The Rose"], 
+        answer: 2 },
+
+      { q: "Why were early theatres built outside London city limits?", 
+        options: ["Lack of land", "Royal orders", "Opposition from Puritan authorities", "Better audience access"], 
+        answer: 2 },
+
+      { q: "The Curtain Theatre was established in:", 
+        options: ["1576", "1577", "1587", "1599"], 
+        answer: 1 },
+
+      { q: "The Rose Theatre was associated with which acting company?", 
+        options: ["Lord Chamberlain’s Men", "King’s Men", "Admiral’s Men", "Queen’s Men"], 
+        answer: 2 },
+
+      { q: "The Globe Theatre was built in:", 
+        options: ["1587", "1592", "1599", "1608"], 
+        answer: 2 },
+
+      { q: "Shakespeare owned approximately what share in the Globe Theatre?", 
+        options: ["5%", "10%", "12.5%", "25%"], 
+        answer: 2 },
+
+      { q: "The Globe Theatre was destroyed by fire in 1613 during a performance of:", 
+        options: ["Hamlet", "Macbeth", "Henry VIII", "Othello"], 
+        answer: 2 },
+
+      { q: "What caused the Globe fire?", 
+        options: ["Lightning", "Candle accident", "Cannon misfire", "Riot"], 
+        answer: 2 },
+
+      { q: "The Globe Theatre was rebuilt in:", 
+        options: ["1612", "1613", "1614", "1616"], 
+        answer: 2 },
+
+      { q: "Which was Shakespeare’s indoor theatre?", 
+        options: ["The Globe", "The Rose", "Blackfriars", "The Curtain"], 
+        answer: 2 },
+
+      { q: "Indoor theatres like Blackfriars used:", 
+        options: ["Sunlight only", "Fire torches", "Candlelight/artificial lighting", "No lighting"], 
+        answer: 2 },
+
+      { q: "The open area where common people stood was called:", 
+        options: ["Gallery", "Stage", "Yard (Pit)", "Box"], 
+        answer: 2 },
+
+      { q: "The people standing in the yard were known as:", 
+        options: ["Aristocrats", "Groundlings", "Courtiers", "Gallants"], 
+        answer: 1 },
+
+      { q: "Wealthy spectators often sat:", 
+        options: ["In the yard", "On the stage itself", "Outside theatre", "Behind curtains"], 
+        answer: 1 },
+
+      { q: "The Lord Chamberlain’s Men became the King’s Men under:", 
+        options: ["Elizabeth I", "James I", "Charles I", "Henry VIII"], 
+        answer: 1 },
+
+      { q: "The patron of the King’s Men was:", 
+        options: ["Henry Carey", "James I", "Philip Henslowe", "Richard Burbage"], 
+        answer: 1 },
+
+      { q: "The leading actor of the Lord Chamberlain’s Men was:", 
+        options: ["William Kempe", "Robert Armin", "Richard Burbage", "John Heminges"], 
+        answer: 2 },
+
+      { q: "William Kempe was known for:", 
+        options: ["Tragic roles", "Philosophical speeches", "Comic clown roles", "Villain roles"], 
+        answer: 2 },
+
+      { q: "Women’s roles in Shakespeare’s time were played by:", 
+        options: ["Women", "Boys", "Elderly men", "Nobles"], 
+        answer: 1 },
+
+      { q: "The stage roof representing the sky was called:", 
+        options: ["Hell", "Heaven", "Hut", "Gallery"], 
+        answer: 1 },
+
+      { q: "The trapdoor beneath the stage symbolized:", 
+        options: ["Heaven", "Earth", "Hell", "Balcony"], 
+        answer: 2 },
+
+      { q: "Shakespeare’s plays had no elaborate scenery, so setting was conveyed through:", 
+        options: ["Painted backdrops", "Lighting effects", "Dialogue and description", "Music"], 
+        answer: 2 },
+
+      { q: "Elizabethan audiences preferred:", 
+        options: ["Silent, intellectual drama", "Minimal action", "Violence, humor, and spectacle", "Only religious plays"], 
+        answer: 2 }
+    ];
+
+    let currentLanguage = 'en';
+    let selectedAnswers = new Array(25).fill(null);
+    let currentQuestionIndex = 0;
+    let timerInterval;
+    let timeLeft = 15 * 60;
+    let candidateName = "";
+    let isDarkMode = false;
+    let quizStartTime = Date.now();
+
+    function toggleTheme() {
+      isDarkMode = !isDarkMode;
+      document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+      document.getElementById('themeBtn').textContent = isDarkMode ? '☀️ Light' : '🌙 Dark';
+    }
+
+    function startExam() {
+      candidateName = document.getElementById('candidateName').value.trim();
+      if (!candidateName) return alert("Please enter the Name of the Candidate.");
+      
+      document.getElementById('startScreen').style.display = 'none';
+      document.getElementById('quizSection').style.display = 'block';
+      document.getElementById('topCandidateName').textContent = "Candidate: " + candidateName;
+      quizStartTime = Date.now();
+      renderCurrentQuestion();
+      startTimer();
+    }
+
+    function renderCurrentQuestion() {
+      const q = questions[currentQuestionIndex];
+      let html = `<div class="question">`;
+      html += `<div style="font-weight:bold; color:#1e3a8a; margin-bottom:12px;">Question ${currentQuestionIndex + 1} of 25</div>`;
+      html += `<p><strong>${q.q}</strong></p>`;
+
+      q.options.forEach((opt, j) => {
+        const selected = selectedAnswers[currentQuestionIndex] === j ? 'selected' : '';
+        html += `<div class="option ${selected}" onclick="selectAnswer(${j})">
+          ${String.fromCharCode(65 + j)}) ${opt}
+        </div>`;
+      });
+
+      html += `</div>`;
+
+      document.getElementById('quiz').innerHTML = html;
+      document.getElementById('currentQ').textContent = currentQuestionIndex + 1;
+      updateNavigationButtons();
+    }
+
+    function selectAnswer(optionIndex) {
+      selectedAnswers[currentQuestionIndex] = optionIndex;
+      renderCurrentQuestion();
+    }
+
+    function nextQuestion() {
+      if (currentQuestionIndex < 24) {
+        currentQuestionIndex++;
+        renderCurrentQuestion();
+      }
+    }
+
+    function prevQuestion() {
+      if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        renderCurrentQuestion();
+      }
+    }
+
+    function updateNavigationButtons() {
+      const nav = document.getElementById('navButtons');
+      let html = `<button onclick="prevQuestion()">← Previous</button>`;
+      if (currentQuestionIndex < 24) {
+        html += `<button onclick="nextQuestion()">Next →</button>`;
+      } else {
+        html += `<button onclick="submitQuiz()" class="submit-btn">Submit Final</button>`;
+      }
+      nav.innerHTML = html;
+    }
+
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        const min = Math.floor(timeLeft / 60);
+        const sec = timeLeft % 60;
+        document.getElementById('timer').textContent = `Time Left: ${min}:${sec < 10 ? '0' : ''}${sec}`;
+        if (timeLeft <= 0) submitQuiz();
+      }, 1000);
+    }
+
+    function submitQuiz() {
+      if (timerInterval) clearInterval(timerInterval);
+      let score = 0;
+      questions.forEach((q, i) => { if (selectedAnswers[i] === q.answer) score++; });
+
+      const percentage = ((score / 25) * 100).toFixed(1);
+      document.getElementById('quizSection').style.display = 'none';
+      document.getElementById('resultSection').style.display = 'block';
+      document.getElementById('scoreCircle').style.setProperty('--progress', `${percentage}%`);
+      document.getElementById('scoreValue').textContent = score;
+      document.getElementById('finalCandidateName').textContent = candidateName;
+
+      const badge = document.getElementById('performanceBadge');
+      if (score >= 20) {
+        badge.textContent = "🌟 Excellent Performance!";
+        badge.className = "performance-badge badge-excellent";
+      } else if (score >= 15) {
+        badge.textContent = "👍 Good Job!";
+        badge.className = "performance-badge badge-good";
+      } else {
+        badge.textContent = "📚 Needs Improvement";
+        badge.className = "performance-badge badge-improve";
+      }
+
+      // Review
+      let reviewHTML = questions.map((q, i) => {
+        const isCorrect = selectedAnswers[i] === q.answer;
+        return `
+          <div class="question" style="border-left: 6px solid ${isCorrect ? '#22c55e' : '#ef4444'};">
+            <p><strong>Q${i+1}: ${q.q}</strong></p>
+            <p>Your Answer: <strong>${selectedAnswers[i] !== null ? String.fromCharCode(65 + selectedAnswers[i]) : "Not Answered"}</strong></p>
+            <p style="color:${isCorrect ? 'green' : 'red'}">Correct Answer: ${String.fromCharCode(65 + q.answer)}</p>
+          </div>`;
+      }).join('');
+      document.getElementById('reviewSection').innerHTML = reviewHTML;
+    }
+
+    function restartQuiz() {
+      if (confirm("Do you want to restart the exam?")) location.reload();
+    }
+
+    window.onload = () => {};
+  </script>
+</body>
+</html>
